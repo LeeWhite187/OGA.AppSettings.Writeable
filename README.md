@@ -3,7 +3,7 @@ Provides write access to Json files loaded by ConfigurationBuilder
 
 ## Description
 This library contains the classes and logic necessary for runtime-update of json config files that are consumed by ConfigurationBuilder.
-This allows json files, such as appsettings.json, to be edited from a REST call, and changes take immediate effect.
+This allows json files, such as appsettings.json (loaded by a NET Core service), to be edited from within the service, and changes take immediate effect.
 
 ## Installation
 OGA.AppSettings.Writeable is available via NuGet:
@@ -15,70 +15,81 @@ This library depends on:
 * [NewtonSoft.Json](https://github.com/JamesNK/Newtonsoft.Json)
 
 ## Usage
-Here are usage examples...
+Editing json-file configuration at runtime, requires that associated FileProvider instances be writable, and that DI-registered config instances are writable.
+Once that is done, mappable config properties can be updated at runtime.
 
-### Create In-Memory Keystore with some keys
+### Writable FileProvider Setup
+To set file providers for json config files as writeable, we can add them as writeable, or convert loaded ones to writeable.
+
+#### Explicitly Add Writeable Json Config File
+If you have additional json files that you want loaded by ConfigurationBuilder, and be runtime editable, you can add them during configuration build.
+For example, the following snippet adds a json file (in the exe folder) named, 'config.json', and makes it runtime editable:
 ```
-            // Create three keys...
-            KeyStore_v2_Base.Create_New_AES_Key(Guid.NewGuid().ToString(), 256, out var k1);
-            KeyStore_v2_Base.Create_New_ECDSA_KeyPair(Guid.NewGuid().ToString(), out var k2);
-            KeyStore_v2_Base.Create_New_RSA_KeyPair(Guid.NewGuid().ToString(), 512, out var k3);
-
-            // Add all three keys to a new in-memory keystore instance...
-            var ks = new KeyStore_v2_Base();
-            var res1 = ks.AddKey_toStore(k1);
-            var res2 = ks.AddKey_toStore(k2);
-            var res3 = ks.AddKey_toStore(k3);
-```
-
-### Get Oldest Active Symmetric Key in Keystore
-```
-            // Create a keystore with a couple of symmetric keys...
-            KeyStore_v2_Base.Create_New_AES_Key(Guid.NewGuid().ToString(), 256, out var k1);
-            KeyStore_v2_Base.Create_New_AES_Key(Guid.NewGuid().ToString(), 256, out var k2);
-
-            var ks = new KeyStore_v2_Base();
-            var res1 = ks.AddKey_toStore(k1);
-            var res2 = ks.AddKey_toStore(k2);
-
-            // Retrieve the oldest AES key in the keystore...
-            // To query the store, we need to build a predicate filter... for AES keys.
-            var filter = OGA.DomainBase.QueryHelpers.PredicateBuilder.True<KeyObject_v2>(); // Filter for symmetric keys.
-            filter = filter.And<KeyObject_v2>(t => t.Is_SymmetricKey()); // Filter for enabled keys.
-            filter = filter.And<KeyObject_v2>(t => t.Status == eKeyStatus.Enabled); // Filter for private keys.
-            // Pass the query filter to the keystore...
-            var res = ks.GetOldestKey_fromStore_byFilter(filter, out var k4);
-            if (res != 1)
+            .ConfigureAppConfiguration((hostingContext, config) =>
             {
-                // Failed to locate an AES key in keystore.
-                return;
-            }
-            
-            // Do something with the retrieved key...
-            var keystring = k4.PrivateKey;
+                        // Add config.json file as runtime editable...
+                        config.AddWriteableJsonFile("config.json", optional: true, reloadOnChange: true);
+            })
 ```
 
-### Save a Keystore to a File
+#### Convert Existing Json Config File to Writeable
+If you want to allow runtime editing of json settings files that are automatically loaded by the runtime (such as appsettings.json), you will need to run the following replacer method call, from inside the lambda of the ConfigureAppConfiguration method.
+Here's an example of what that looks like:
 ```
-            // Create a couple of keys...
-            KeyStore_v2_Base.Create_New_AES_Key(Guid.NewGuid().ToString(), 256, out var k1);
-            KeyStore_v2_Base.Create_New_AES_Key(Guid.NewGuid().ToString(), 256, out var k2);
-
-            // Create a file-based keystore instance...
-            // Pass in the filepath and storage password at construction...
-            var ks = new KeyStore_v2_File(store_filepath, storagepassword);
-            // Add the created keys...
-            var res1 = ks.AddKey_toStore(k1);
-            var res2 = ks.AddKey_toStore(k2);
-
-            // Save the store to disk...
-            var saveres = ks.Save();
-            if (res != 1)
+            // This call adds in our Writeable JSON config file...
+            .ConfigureAppConfiguration((hostingContext, config) =>
             {
-                // Failed to save keystore.
-                return;
-            }
+            // Replace existing JSON config sources with own writeable JSON sources...
+            OGA.AppSettings.Writeable.JsonConfigSource_Replacer.Replace_JSONConfigSources_with_Writeable_Sources(config);
+            })
 ```
+
+### Register Writeable Config with DI
+With the file providers of json config files set to writeable by one of the two above methods, you then need to DI-register the config class instances as writeable.
+This is done using the ConfigureWritable extension method, in startup.cs.
+For example, the following snippet (from startup.cs) retrieves a section of configuration, maps it to an app path class, and registers it as writeable with DI:
+```
+            // Get application path configuration so that it's available to the process...
+            IConfigurationSection apc = Configuration.GetSection(cConfig_AppPaths.CONSTANT_SectionName);
+            services.ConfigureWritable<cConfig_AppPaths>(apc);
+```
+
+### Update Config at Runtime
+Once we have a json file loaded as writeable, and registered with DI, we can recall it (using DI) and read/write to it.
+Recalling config data from DI, comes in the form of IOptions instances.\
+In the case of writeable config, we recall config data with IWritableOptions.
+
+For example, the following is a simple class that uses DI to get an instance of writeable config, and read and write to it.
+```
+    public class SampleService
+    {
+        // Keep a local copy of the writeable options instance...
+        private readonly IWritableOptions<cConfig_AppPaths> _appSettings;
+
+
+        // Have the constructor pull our writeable config from DI...
+        public SampleService(IWritableOptions<cConfig_AppPaths> appSettings)
+        {
+            // And, save it locally...
+            this._appSettings = appSettings;
+        }
+
+        // Sample usage method...
+        public void SampleUsage()
+        {
+            // To read from the config, we will reference the IOptions value, to reach the config properties....
+            string val = this._appSettings.Value.RepoType;
+
+            // To update the config, we need to compose a lambda and pass it to the writeable options instance...
+            this._appSettings.Update(opt =>
+            {
+                opt.RepoType = "newval";
+            });
+        }
+    }
+```
+The above sample class gets the writeable appsettings config from DI (at construction).
+And, it exposes a method call that reads and writes to the config instance at runtime.
 
 ## Building OGA.AppSettings.Writeable
 This library is built with the new SDK-style projects.
