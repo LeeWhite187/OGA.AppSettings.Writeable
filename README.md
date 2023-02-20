@@ -13,6 +13,7 @@ OGA.AppSettings.Writeable is available via NuGet:
 This library depends on:
 * [OGA.SharedKernel](https://github.com/LeeWhite187/OGA.SharedKernel)
 * [NewtonSoft.Json](https://github.com/JamesNK/Newtonsoft.Json)
+It also requires a framework reference to: Microsoft.AspNetCore.App
 
 ## Usage
 Editing json-file configuration at runtime, requires that associated FileProvider instances be writable, and that DI-registered config instances are writable.
