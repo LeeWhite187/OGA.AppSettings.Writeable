@@ -3,7 +3,7 @@ Provides write access to Json files loaded by ConfigurationBuilder
 
 ## Description
 This library contains the classes and logic necessary for runtime-update of json config files that are consumed by ConfigurationBuilder.
-This allows json files, such as appsettings.json, to be edited from a REST call, and changes take immediate effect.
+This allows json files, such as appsettings.json (loaded by a NET Core service), to be edited from within the service, and changes take immediate effect.
 
 ## Installation
 OGA.AppSettings.Writeable is available via NuGet:
@@ -15,69 +15,24 @@ This library depends on:
 * [NewtonSoft.Json](https://github.com/JamesNK/Newtonsoft.Json)
 
 ## Usage
-Here are usage examples...
+Using this library, requires a couple things:
 
-### Create In-Memory Keystore with some keys
+If you want to allow runtime editing of json settings files that are automatically loaded by the runtime (such as appsettings.json), you will need to run the following replacer method call, from inside the lambda of the ConfigureAppConfiguration method.
+Here's an example of what that looks like:
 ```
-            // Create three keys...
-            KeyStore_v2_Base.Create_New_AES_Key(Guid.NewGuid().ToString(), 256, out var k1);
-            KeyStore_v2_Base.Create_New_ECDSA_KeyPair(Guid.NewGuid().ToString(), out var k2);
-            KeyStore_v2_Base.Create_New_RSA_KeyPair(Guid.NewGuid().ToString(), 512, out var k3);
-
-            // Add all three keys to a new in-memory keystore instance...
-            var ks = new KeyStore_v2_Base();
-            var res1 = ks.AddKey_toStore(k1);
-            var res2 = ks.AddKey_toStore(k2);
-            var res3 = ks.AddKey_toStore(k3);
-```
-
-### Get Oldest Active Symmetric Key in Keystore
-```
-            // Create a keystore with a couple of symmetric keys...
-            KeyStore_v2_Base.Create_New_AES_Key(Guid.NewGuid().ToString(), 256, out var k1);
-            KeyStore_v2_Base.Create_New_AES_Key(Guid.NewGuid().ToString(), 256, out var k2);
-
-            var ks = new KeyStore_v2_Base();
-            var res1 = ks.AddKey_toStore(k1);
-            var res2 = ks.AddKey_toStore(k2);
-
-            // Retrieve the oldest AES key in the keystore...
-            // To query the store, we need to build a predicate filter... for AES keys.
-            var filter = OGA.DomainBase.QueryHelpers.PredicateBuilder.True<KeyObject_v2>(); // Filter for symmetric keys.
-            filter = filter.And<KeyObject_v2>(t => t.Is_SymmetricKey()); // Filter for enabled keys.
-            filter = filter.And<KeyObject_v2>(t => t.Status == eKeyStatus.Enabled); // Filter for private keys.
-            // Pass the query filter to the keystore...
-            var res = ks.GetOldestKey_fromStore_byFilter(filter, out var k4);
-            if (res != 1)
+            // This call adds in our Writeable JSON config file...
+            .ConfigureAppConfiguration((hostingContext, config) =>
             {
-                // Failed to locate an AES key in keystore.
-                return;
-            }
-            
-            // Do something with the retrieved key...
-            var keystring = k4.PrivateKey;
+            // Replace existing JSON config sources with own writeable JSON sources...
+            OGA.AppSettings.Writeable.JsonConfigSource_Replacer.Replace_JSONConfigSources_with_Writeable_Sources(config);
+            })
 ```
 
-### Save a Keystore to a File
+If you have additional json files that you want loaded by ConfigurationBuilder, and be runtime editable, add them with the writeablejsonfile extension method.
+For example, the following snippet adds a json file (in the exe folder) named, 'config.json', and makes it runtime editable:
 ```
-            // Create a couple of keys...
-            KeyStore_v2_Base.Create_New_AES_Key(Guid.NewGuid().ToString(), 256, out var k1);
-            KeyStore_v2_Base.Create_New_AES_Key(Guid.NewGuid().ToString(), 256, out var k2);
-
-            // Create a file-based keystore instance...
-            // Pass in the filepath and storage password at construction...
-            var ks = new KeyStore_v2_File(store_filepath, storagepassword);
-            // Add the created keys...
-            var res1 = ks.AddKey_toStore(k1);
-            var res2 = ks.AddKey_toStore(k2);
-
-            // Save the store to disk...
-            var saveres = ks.Save();
-            if (res != 1)
-            {
-                // Failed to save keystore.
-                return;
-            }
+            // Add config.json file as runtime editable...
+            config.AddWriteableJsonFile("config.json", optional: true, reloadOnChange: true);
 ```
 
 ## Building OGA.AppSettings.Writeable
