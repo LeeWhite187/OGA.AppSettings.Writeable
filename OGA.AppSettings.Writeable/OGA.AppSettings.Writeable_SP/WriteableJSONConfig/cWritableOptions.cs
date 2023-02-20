@@ -13,10 +13,20 @@ using Newtonsoft.Json.Linq;
 
 namespace OGA.AppSettings.Writeable.JSONConfig
 {
+    /// <summary>
+    /// This class is used to retrieve writeable config instance data from DI.
+    /// See this reference for usage: https://github.com/LeeWhite187/OGA.AppSettings.Writeable
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public interface IWritableOptions<out T> : IOptions<T> where T : class, new()
     {
         void Update(Action<T> applyChanges);
     }
+    /// <summary>
+    /// This class is used to retrieve writeable config instance data from DI.
+    /// See this reference for usage: https://github.com/LeeWhite187/OGA.AppSettings.Writeable
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class cWritableOptions<T> : IWritableOptions<T> where T : class, new()
     {
         private readonly IOptionsMonitor<T> _options;

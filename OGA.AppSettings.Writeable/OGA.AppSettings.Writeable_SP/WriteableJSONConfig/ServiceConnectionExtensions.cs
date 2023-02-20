@@ -9,6 +9,11 @@ using Microsoft.Extensions.Options;
 
 namespace OGA.AppSettings.Writeable.JSONConfig
 {
+    /// <summary>
+    /// This class is used to register a mapped config section with DI.
+    /// See this reference for usage: https://github.com/LeeWhite187/OGA.AppSettings.Writeable
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public static class ServiceCollectionExtensions
     {
         public static void ConfigureWritable<T>(

@@ -202,8 +202,6 @@ namespace OGA.AppSettings.Writeable.JSONConfig
         //private static IDictionary<string, string> CreateAndSaveDefaultValues(
         //    EFConfigurationContext dbContext)
         //{
-        //    // Quotes (c)2005 Universal Pictures: Serenity
-        //    // https://www.uphe.com/movies/serenity
         //    var configValues =
         //        new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         //        {
