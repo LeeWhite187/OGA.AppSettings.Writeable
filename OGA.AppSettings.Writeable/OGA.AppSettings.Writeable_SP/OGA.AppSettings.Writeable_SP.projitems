@@ -6,10 +6,11 @@
     <SharedGUID>7430013c-50cc-4e57-ab49-913b2a201a78</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>OGA.AppSettings.Writeable_SP</Import_RootNamespace>
+    <Import_RootNamespace>OGA.AppSettings.Writeable</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Config_AppSettings_Editor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)JsonConfigSource_Replacer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WriteableJSONConfig\cJSONFlattener.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WriteableJSONConfig\cWritableOptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WriteableJSONConfig\cWriteable_JSONConfigProvider.cs" />

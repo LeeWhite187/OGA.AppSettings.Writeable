@@ -6,7 +6,7 @@
     <SharedGUID>5e76947c-40dc-4894-9daa-4c6b41df26c2</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>OGA.AppSettings.Writeable_Tests_SP</Import_RootNamespace>
+    <Import_RootNamespace>OGA.AppSettings.Writeable_Tests</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
   </ItemGroup>
