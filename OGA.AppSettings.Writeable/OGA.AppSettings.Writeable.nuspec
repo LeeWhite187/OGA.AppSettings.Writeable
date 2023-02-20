@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+  <metadata>
+    <id>OGA.AppSettings.Writeable</id>
+    <title>OGA Writeable Json AppSettings</title>
+    <version>1.3.1</version>
+    <authors>Lee White</authors>
+    <owners>Lee White</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Provides write access to Json files loaded by ConfigurationBuilder</description>
+    <releaseNotes>(Please write the package release notes in "OGA.AppSettings.Writeable-RELEASE-NOTES.txt".)</releaseNotes>
+    <copyright>$copyright$</copyright>
+	<repository type="git" url="https://github.com/LeeWhite187/OGA.AppSettings.Writeable" />
+    <license type="expression">MIT</license>
+
+    <dependencies>
+      <group targetFramework="net6.0">
+        <dependency id="Newtonsoft.Json" version="13.0.1" exclude="Build,Analyzers" />
+        <dependency id="OGA.SharedKernel" version="2.1.0" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="net5.0">
+        <dependency id="Newtonsoft.Json" version="13.0.1" exclude="Build,Analyzers" />
+        <dependency id="OGA.SharedKernel" version="2.1.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+    <frameworkReferences>
+      <group targetFramework="net5.0">
+        <frameworkReference name="Microsoft.AspNetCore.App" />
+      </group>
+      <group targetFramework="net6.0">
+        <frameworkReference name="Microsoft.AspNetCore.App" />
+      </group>
+    </frameworkReferences>
+  </metadata>
+  <files>
+    <file src=".\OGA.AppSettings.Writeable_NET6\bin\DebugWin\net6.0\win-x64\OGA.AppSettings.Writeable.dll" target="ref\net6.0" />
+    <file src=".\OGA.AppSettings.Writeable_NET6\bin\DebugWin\net6.0\win-x64\OGA.AppSettings.Writeable.dll" target="runtimes\win-x64\lib\net6.0" />
+    <file src=".\OGA.AppSettings.Writeable_NET6\bin\DebugWin\net6.0\win-x64\OGA.AppSettings.Writeable.pdb" target="runtimes\win-x64\lib\net6.0" />
+    <file src=".\OGA.AppSettings.Writeable_NET6\bin\DebugLinux\net6.0\linux-x64\OGA.AppSettings.Writeable.dll" target="runtimes\linux-x64\lib\net6.0" />
+    <file src=".\OGA.AppSettings.Writeable_NET6\bin\DebugLinux\net6.0\linux-x64\OGA.AppSettings.Writeable.pdb" target="runtimes\linux-x64\lib\net6.0" />
+
+    <file src=".\OGA.AppSettings.Writeable_NET5\bin\DebugWin\net5.0\win-x64\OGA.AppSettings.Writeable.dll" target="ref\net5.0" />
+    <file src=".\OGA.AppSettings.Writeable_NET5\bin\DebugWin\net5.0\win-x64\OGA.AppSettings.Writeable.dll" target="runtimes\win-x64\lib\net5.0" />
+    <file src=".\OGA.AppSettings.Writeable_NET5\bin\DebugWin\net5.0\win-x64\OGA.AppSettings.Writeable.pdb" target="runtimes\win-x64\lib\net5.0" />
+    <file src=".\OGA.AppSettings.Writeable_NET5\bin\DebugLinux\net5.0\linux-x64\OGA.AppSettings.Writeable.dll" target="runtimes\linux-x64\lib\net5.0" />
+    <file src=".\OGA.AppSettings.Writeable_NET5\bin\DebugLinux\net5.0\linux-x64\OGA.AppSettings.Writeable.pdb" target="runtimes\linux-x64\lib\net5.0" />
+  </files>
+</package>

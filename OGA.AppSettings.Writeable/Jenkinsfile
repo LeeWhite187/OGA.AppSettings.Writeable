@@ -1,0 +1,195 @@
+// Jenkins - Build and Publish Pipeline for Cross-Platform Binaries
+//	Rev:	1
+//	Date:	20220930
+//	Changes:	This version was updated to accept an additional variable from Jenkins, for the target framework.
+//				This additional variable allows the pipeline to name the published zip file for the framework target, and to create a folder in the Artifactory repo, specific to each target framework.
+//
+// This jenkins file will build a net core or a NETFramework binary in Windows and Linux.
+// It will create a zip file of the published binaries for each OS.
+// The zip files will be checked into Artifactory at the specified repository and folder path.
+
+// Instructions:
+//	Place this file in the solution folder that contains library/binary project.
+//	Fill in the four variables, below, for solution folder, project folder,  project name, and git repo.
+
+def projectFolder = ENV_projectFolder
+def solutionFolder = ENV_solutionFolder
+def projectName = ENV_projectName
+def gitrepo = ENV_gitrepo
+//def projectFolder = "OGA.SharedKernel/OGA.SharedKernel"
+//def solutionFolder = "OGA.SharedKernel"
+//def projectName = "OGA.SharedKernel"
+// def gitrepo = "git@github.com:LeeWhite187/OGA.SharedKernel.git"
+
+def version3 = '1.1.1'
+def version4 = '1.1.1.1'
+
+def comment = 'Repo tagged during automated build.'
+
+pipeline
+{
+    agent any
+    stages
+	{
+        stage('Sanity Check')
+		{
+            steps
+			{
+				echo "Current workspace is $WORKSPACE"
+				echo "Current Build Number is $BUILD_NUMBER"
+				echo "Current Job Name is $JOB_NAME"
+
+            }
+        }
+//		stage ('Do Proper Checkout')
+//		{
+//            steps
+//			{
+//				sshagent(['glwhite-github-client-key'])
+//				{
+//					sh("git pull origin master")
+//				}
+//            }
+//		}
+        stage('Get Next Version')
+		{
+            steps
+			{
+				sh "/var/lib/jenkins/.dotnet/tools/dotnet-gitversion /output buildserver"
+				
+				script
+				{
+					def props = readProperties file: 'gitversion.properties'
+					env.GitVersion_SemVer = props.GitVersion_SemVer
+					env.GitVersion_FullSemVer = props.GitVersion_FullSemVer
+					
+					echo "env.GitVersion_SemVer is: $env.GitVersion_SemVer"
+					echo "env.GitVersion_FullSemVer is: $env.GitVersion_FullSemVer"
+					
+					version3 = "${props.GitVersion_Major}.${props.GitVersion_Minor}.${props.GitVersion_Patch}"
+					version4 = "${props.GitVersion_Major}.${props.GitVersion_Minor}.${BUILD_NUMBER}.${props.GitVersion_Patch}"
+					
+					echo "Version3 is: $version3"
+					echo "version4 is: $version4"
+				}
+            }
+        }
+        stage('Set Version in Project')
+		{
+			steps
+			{
+				//sh "dotnet /projects/tools/csprojeditor/CSProjEditor.dll set 'v${version4}' '${projectFolder}_NET452/${projectName}_NET452.csproj'"
+				//sh "dotnet /projects/tools/csprojeditor/CSProjEditor.dll set 'v${version4}' '${projectFolder}_NET47/${projectName}_NET47.csproj'"
+				sh "dotnet /projects/tools/csprojeditor/CSProjEditor.dll set 'v${version4}' '${projectFolder}_NET5/${projectName}_NET5.csproj'"
+				sh "dotnet /projects/tools/csprojeditor/CSProjEditor.dll set 'v${version4}' '${projectFolder}_NET6/${projectName}_NET6.csproj'"
+			}
+		}
+//        stage('Set Version in Programcs')
+//		{
+//		// This is only done for binaries... not libraries.
+//			steps
+//			{
+//				sh "dotnet /projects/tools/programcseditor/ProgramcsEditor.dll set 'v${version4}' '${projectFolder}_NET452/${projectName}_NET452.csproj'"
+//				sh "dotnet /projects/tools/programcseditor/ProgramcsEditor.dll set 'v${version4}' '${projectFolder}_NET47/${projectName}_NET47.csproj'"
+//				sh "dotnet /projects/tools/programcseditor/ProgramcsEditor.dll set 'v${version4}' '${projectFolder}_NET5/${projectName}_NET5.csproj'"
+//				sh "dotnet /projects/tools/programcseditor/ProgramcsEditor.dll set 'v${version4}' '${projectFolder}_NET6/${projectName}_NET6.csproj'"
+//			}
+//		}
+        stage('Set Version in NUSPEC')
+		{
+			steps
+			{
+				sh "dotnet /projects/tools/nuspeceditor/NUSPECEditor.dll set 'v${version4}' '${solutionFolder}/${projectName}.nuspec'"
+			}
+		}
+        stage('Restore packages')
+		{
+           steps
+		   {
+               //sh "dotnet restore '${projectFolder}_NET452/${projectName}_NET452.csproj'"
+               //sh "dotnet restore '${projectFolder}_NET47/${projectName}_NET47.csproj'"
+               sh "dotnet restore '${projectFolder}_NET5/${projectName}_NET5.csproj'"
+               sh "dotnet restore '${projectFolder}_NET6/${projectName}_NET6.csproj'"
+           }
+		}
+        stage('Build-Linux')
+		{
+           steps
+		   {
+				//sh "dotnet build '${projectFolder}_NET452/${projectName}_NET452.csproj' -c DebugLinux --runtime linux-x64 --no-self-contained"
+				//sh "dotnet build '${projectFolder}_NET47/${projectName}_NET47.csproj' -c DebugLinux --runtime linux-x64 --no-self-contained"
+				sh "dotnet build '${projectFolder}_NET5/${projectName}_NET5.csproj' -c DebugLinux --runtime linux-x64 --no-self-contained"
+				sh "dotnet build '${projectFolder}_NET6/${projectName}_NET6.csproj' -c DebugLinux --runtime linux-x64 --no-self-contained"
+           }
+		}
+        stage('Build-Windows')
+		{
+           steps
+		   {
+				//sh "dotnet build '${projectFolder}_NET452/${projectName}_NET452.csproj' -c DebugWin --runtime win-x64 --no-self-contained"
+				//sh "dotnet build '${projectFolder}_NET47/${projectName}_NET47.csproj' -c DebugWin --runtime win-x64 --no-self-contained"
+				sh "dotnet build '${projectFolder}_NET5/${projectName}_NET5.csproj' -c DebugWin --runtime win-x64 --no-self-contained"
+				sh "dotnet build '${projectFolder}_NET6/${projectName}_NET6.csproj' -c DebugWin --runtime win-x64 --no-self-contained"
+           }
+		}
+        stage('Create Nuget Package')
+		{
+           steps
+		   {
+				sh "mono /usr/lib/nuget/nuget.exe pack ./${solutionFolder}/${projectName}.nuspec -IncludeReferencedProjects -symbols -SymbolPackageFormat snupkg -OutputDirectory ./Publish -Verbosity detailed"
+           }
+		}
+        stage('Publish to Local Nuget')
+		{
+           steps
+		   {
+				sh "dotnet nuget push -s http://192.168.1.161:8080/v3/index.json './Publish/${projectName}.${version3}.nupkg'"
+				sh "dotnet nuget push -s http://192.168.1.161:8080/v3/index.json './Publish/${projectName}.${version3}.snupkg'"
+           }
+		}
+        stage('Publish Public Nuget')
+		{
+           steps
+		   {
+				// Retrieve the API key for pushing packages...
+				withCredentials([string(credentialsId: 'nuget.org-apikey-20230217', variable: 'NUGETAPIKEY')])
+				{
+					//set SECRET with the credential content
+					echo "My secret text is '${NUGETAPIKEY}'"
+
+					sh "dotnet nuget push -s https://api.nuget.org/v3/index.json './Publish/${projectName}.${version3}.nupkg' --api-key ${NUGETAPIKEY}"
+					//sh "dotnet nuget push -s https://api.nuget.org/v3/index.json './Publish/${projectName}.${version3}.snupkg' --api-key ${NUGETAPIKEY}"
+				}
+           }
+		}
+		stage ('Set New Version Tag')
+		{
+            steps
+			{
+				sshagent(['glwhite-github-client-key'])
+				{
+					sh("git config --global user.email 'LeeWhite187@gmail.com'")
+					sh("git config --global user.name 'Lee White'")
+					sh("git tag -a -f -m '${comment}' ${version3}")
+					//sh("git -c core.askpass=true push ${repoName} ${tag}")
+					//sh "git push origin master"
+					sh "git push ${gitrepo} ${version3}"
+				}
+            }
+		}
+//		stage ('Checkin')
+//		{
+//			sshagent([glwhite-github-client-key])
+//			{
+//				sh("git tag -a -f -m '${comment}' ${tag}")
+//				sh("git -c core.askpass=true push ${repoName} ${tag}")
+//				sh "git push origin master"
+//			}
+//			withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: '012ce21d-e920-44ee-b6f7-08df8ab41de0', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD']])
+//			{
+//				sh("git tag -a some_tag -m 'Jenkins'")
+//				sh('git push git://${GIT_USERNAME}:${GIT_PASSWORD}@bitbucket.org:myproj.git')
+//			}
+//		}
+    }
+}

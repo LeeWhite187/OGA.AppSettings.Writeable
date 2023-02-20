@@ -1,0 +1,61 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OGA.AppSettings.Writeable.Dev", "OGA.AppSettings.Writeable.Dev\OGA.AppSettings.Writeable.Dev.csproj", "{1A39E43D-9499-44D8-A766-EC05CBD0BB4D}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "OGA.AppSettings.Writeable_SP", "OGA.AppSettings.Writeable_SP\OGA.AppSettings.Writeable_SP.shproj", "{7430013C-50CC-4E57-AB49-913B2A201A78}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OGA.AppSettings.Writeable_NET5", "OGA.AppSettings.Writeable_NET5\OGA.AppSettings.Writeable_NET5.csproj", "{E4597D25-BCD7-48AA-9274-F5F7FAFC3000}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OGA.AppSettings.Writeable_NET6", "OGA.AppSettings.Writeable_NET6\OGA.AppSettings.Writeable_NET6.csproj", "{194FD2BF-C004-46F8-A9C7-B5CDED998F8A}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "OGA.AppSettings.Writeable_Tests_SP", "OGA.AppSettings.Writeable_Tests_SP\OGA.AppSettings.Writeable_Tests_SP.shproj", "{5E76947C-40DC-4894-9DAA-4C6B41DF26C2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OGA.AppSettings.Writeable_NET5_Tests", "OGA.AppSettings.Writeable_NET5_Tests\OGA.AppSettings.Writeable_NET5_Tests.csproj", "{E027B3F3-9B32-4FBF-8F3A-2CA6D0D933B6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OGA.AppSettings.Writeable_NET6_Tests", "OGA.AppSettings.Writeable_NET6_Tests\OGA.AppSettings.Writeable_NET6_Tests.csproj", "{7A662FAE-DD13-426F-B41A-68B1E6840562}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1A39E43D-9499-44D8-A766-EC05CBD0BB4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A39E43D-9499-44D8-A766-EC05CBD0BB4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A39E43D-9499-44D8-A766-EC05CBD0BB4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A39E43D-9499-44D8-A766-EC05CBD0BB4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4597D25-BCD7-48AA-9274-F5F7FAFC3000}.Debug|Any CPU.ActiveCfg = DebugWin|Any CPU
+		{E4597D25-BCD7-48AA-9274-F5F7FAFC3000}.Debug|Any CPU.Build.0 = DebugWin|Any CPU
+		{E4597D25-BCD7-48AA-9274-F5F7FAFC3000}.Release|Any CPU.ActiveCfg = ReleaseWin|Any CPU
+		{E4597D25-BCD7-48AA-9274-F5F7FAFC3000}.Release|Any CPU.Build.0 = ReleaseWin|Any CPU
+		{194FD2BF-C004-46F8-A9C7-B5CDED998F8A}.Debug|Any CPU.ActiveCfg = DebugWin|Any CPU
+		{194FD2BF-C004-46F8-A9C7-B5CDED998F8A}.Debug|Any CPU.Build.0 = DebugWin|Any CPU
+		{194FD2BF-C004-46F8-A9C7-B5CDED998F8A}.Release|Any CPU.ActiveCfg = ReleaseWin|Any CPU
+		{194FD2BF-C004-46F8-A9C7-B5CDED998F8A}.Release|Any CPU.Build.0 = ReleaseWin|Any CPU
+		{E027B3F3-9B32-4FBF-8F3A-2CA6D0D933B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E027B3F3-9B32-4FBF-8F3A-2CA6D0D933B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E027B3F3-9B32-4FBF-8F3A-2CA6D0D933B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E027B3F3-9B32-4FBF-8F3A-2CA6D0D933B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A662FAE-DD13-426F-B41A-68B1E6840562}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A662FAE-DD13-426F-B41A-68B1E6840562}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A662FAE-DD13-426F-B41A-68B1E6840562}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A662FAE-DD13-426F-B41A-68B1E6840562}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DF6EB6C7-0F71-4F91-B27D-C118C6127DC5}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		OGA.AppSettings.Writeable_SP\OGA.AppSettings.Writeable_SP.projitems*{194fd2bf-c004-46f8-a9c7-b5cded998f8a}*SharedItemsImports = 5
+		OGA.AppSettings.Writeable_Tests_SP\OGA.AppSettings.Writeable_Tests_SP.projitems*{5e76947c-40dc-4894-9daa-4c6b41df26c2}*SharedItemsImports = 13
+		OGA.AppSettings.Writeable_SP\OGA.AppSettings.Writeable_SP.projitems*{7430013c-50cc-4e57-ab49-913b2a201a78}*SharedItemsImports = 13
+		OGA.AppSettings.Writeable_Tests_SP\OGA.AppSettings.Writeable_Tests_SP.projitems*{7a662fae-dd13-426f-b41a-68b1e6840562}*SharedItemsImports = 5
+		OGA.AppSettings.Writeable_Tests_SP\OGA.AppSettings.Writeable_Tests_SP.projitems*{e027b3f3-9b32-4fbf-8f3a-2ca6d0d933b6}*SharedItemsImports = 5
+		OGA.AppSettings.Writeable_SP\OGA.AppSettings.Writeable_SP.projitems*{e4597d25-bcd7-48aa-9274-f5f7fafc3000}*SharedItemsImports = 5
+	EndGlobalSection
+EndGlobal

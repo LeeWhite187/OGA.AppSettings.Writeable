@@ -1,0 +1,56 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Target Name="PreparePackageReleaseNotesFromFile" BeforeTargets="GenerateNuspec">
+    <ReadLinesFromFile File="../OGA.AppSettings.Writeable-RELEASE-NOTES.txt">
+      <Output TaskParameter="Lines" ItemName="ReleaseNoteLines" />
+    </ReadLinesFromFile>
+    <PropertyGroup>
+      <PackageReleaseNotes>@(ReleaseNoteLines, '%0a')</PackageReleaseNotes>
+    </PropertyGroup>
+  </Target>
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Configurations>DebugWin;ReleaseWin;DebugLinux;ReleaseLinux</Configurations>
+    <Version>1.3.1</Version>
+    <AssemblyVersion>1.3.13.1</AssemblyVersion>
+    <FileVersion>1.3.13.1</FileVersion>
+    <Company>OGA</Company>
+    <Product>OGA Writeable AppSettings</Product>
+    <PackageId>OGA.AppSettings.Writeable</PackageId>
+    <Authors>Lee White</Authors>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <Description>Provides write access to Json files loaded by ConfigurationBuilder</Description>
+    <PackageReleaseNotes>(Please write the package release notes in "OGA.AppSettings.Writeable-RELEASE-NOTES.txt".)</PackageReleaseNotes>
+    <AssemblyName>OGA.AppSettings.Writeable</AssemblyName>
+    <RootNamespace>OGA.AppSettings.Writeable</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$(Configuration.EndsWith('Win'))">
+    <DefineConstants>$(DefineConstants);Windows;NET6</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$(Configuration.EndsWith('Linux'))">
+    <DefineConstants>$(DefineConstants);Linux;NET6</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$(Configuration.EndsWith('OSX'))">
+    <DefineConstants>$(DefineConstants);OSX;NET6</DefineConstants>
+  </PropertyGroup>
+
+  <Import Project="..\OGA.AppSettings.Writeable_SP\OGA.AppSettings.Writeable_SP.projitems" Label="Shared" />
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="OGA.SharedKernel" Version="2.1.0" />
+  </ItemGroup>
+
+</Project>
