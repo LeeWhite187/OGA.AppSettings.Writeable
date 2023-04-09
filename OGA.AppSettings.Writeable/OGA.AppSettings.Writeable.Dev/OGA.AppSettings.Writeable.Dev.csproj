@@ -3,6 +3,8 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
+    <PlatformTarget>x64</PlatformTarget>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,5 +14,4 @@
   <ItemGroup>
     <ProjectReference Include="..\OGA.AppSettings.Writeable_NET6\OGA.AppSettings.Writeable_NET6.csproj" />
   </ItemGroup>
-
 </Project>

@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "OGA.AppSettings.Writeable.Dev": {
+      "commandName": "Project"
+    }
+  }
+}
