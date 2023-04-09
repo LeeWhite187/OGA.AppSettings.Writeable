@@ -50,7 +50,7 @@
   
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="OGA.SharedKernel" Version="2.2.0" />
+    <PackageReference Include="OGA.SharedKernel" Version="3.0.0" />
   </ItemGroup>
 
 </Project>
