@@ -12,6 +12,13 @@
 //	Place this file in the solution folder that contains library/binary project.
 //	Fill in the four variables, below, for solution folder, project folder,  project name, and git repo.
 
+// Added this import, so we can convert variables to json strings...
+// This is used by the web notification logic in the post steps.
+import groovy.json.JsonOutput
+// Added to support notification body variable usage in the web notification post steps.
+def notificationbody = ""
+
+
 def projectFolder = ENV_projectFolder
 def solutionFolder = ENV_solutionFolder
 def projectName = ENV_projectName
@@ -106,10 +113,10 @@ pipeline
 		{
            steps
 		   {
-               //sh "dotnet restore '${projectFolder}_NET452/${projectName}_NET452.csproj'"
-               //sh "dotnet restore '${projectFolder}_NET47/${projectName}_NET47.csproj'"
-               sh "dotnet restore '${projectFolder}_NET5/${projectName}_NET5.csproj'"
-               sh "dotnet restore '${projectFolder}_NET6/${projectName}_NET6.csproj'"
+               //sh "dotnet restore '${projectFolder}_NET452/${projectName}_NET452.csproj' --configfile '/projects/config/nuget/NuGet.Config'"
+               //sh "dotnet restore '${projectFolder}_NET47/${projectName}_NET47.csproj' --configfile '/projects/config/nuget/NuGet.Config'"
+               sh "dotnet restore '${projectFolder}_NET5/${projectName}_NET5.csproj' --configfile '/projects/config/nuget/NuGet.Config'"
+               sh "dotnet restore '${projectFolder}_NET6/${projectName}_NET6.csproj' --configfile '/projects/config/nuget/NuGet.Config'"
            }
 		}
         stage('Build-Linux')
@@ -191,5 +198,67 @@ pipeline
 //				sh('git push git://${GIT_USERNAME}:${GIT_PASSWORD}@bitbucket.org:myproj.git')
 //			}
 //		}
+    }
+    post
+    {
+		success
+		{
+			script
+			{
+				def jobName = env.JOB_NAME
+				def buildNumber = env.BUILD_NUMBER
+
+				def requestBody =
+				[
+					job: jobName,
+					jobtype: 'build',
+					projectname: projectName,
+					servicename: '',
+					build: buildNumber,
+					status: 'pass',
+					version3: version3,
+					version4: version4,
+					gitrepo: gitrepo
+					// Other relevant job details
+				]
+
+				// Convert the notification object to json...
+				def jsonbody = JsonOutput.toJson(notificationbody)
+
+				httpRequest contentType: 'APPLICATION_JSON', httpMode: 'POST', quiet: false,
+					requestBody: "${jsonbody}", timeout: 10,
+					url: "${env.post_build_callback_url}" // set as a global environment variable in Jenkins
+			}
+		}
+		failure
+		{
+			script
+			{
+				def jobName = env.JOB_NAME
+				def buildNumber = env.BUILD_NUMBER
+
+				def requestBody =
+				[
+					job: jobName,
+					jobtype: 'build',
+					projectname: projectName,
+					servicename: '',
+					build: buildNumber,
+					status: 'fail',
+                    version3: '',
+                    version4: '',
+					gitrepo: gitrepo
+					// Other relevant job details
+				]
+
+				// Convert the notification object to json...
+				def jsonbody = JsonOutput.toJson(notificationbody)
+
+				httpRequest contentType: 'APPLICATION_JSON', httpMode: 'POST', quiet: false,
+					requestBody: "${jsonbody}", timeout: 10,
+					url: "${env.post_build_callback_url}" // set as a global environment variable in Jenkins
+			}			
+		}
+		// Other post-build actions based on your requirements
     }
 }
