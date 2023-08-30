@@ -80,12 +80,7 @@ namespace OGA.AppSettings.Writeable.JSONConfig
 					break;
 
 				default:
-					throw new FormatException(Resources.FormatError_UnsupportedJSONToken("", "", "", ""));
-					//throw new FormatException(Resources.FormatError_UnsupportedJSONToken(
-					//    _reader.TokenType,
-					//    _reader.Path,
-					//    _reader.LineNumber,
-					//    _reader.LinePosition));
+					throw new FormatException(Resources.FormatError_UnsupportedJSONTokenType(token.Type));
 			}
 		}
 
