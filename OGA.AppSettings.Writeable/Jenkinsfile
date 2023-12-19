@@ -139,19 +139,26 @@ pipeline
 				sh "dotnet build '${projectFolder}_NET6/${projectName}_NET6.csproj' -c DebugWin --runtime win-x64 --no-self-contained"
            }
 		}
-        stage('Create Nuget Package')
+// ************************** NOTE: These packaging steps include publishing to nuget.org. *************************
+// These next steps create and publish a nuget package.
+// In order to get pdb files into a nuget package, we cannot specify the '-Symbols' switch on the nuget pack line.
+// But, we want pdb files in the nuget, until we have a reliable symbol server.
+// As well as, logic to generate the snupkg and publish it.
+// So, we will first create a nuget package (without the Symbols switch) so it includes a pdb, and publish the nupkg file.
+// Then, we will create a nuget package again (with the Symbols switch), but we will only publish the snupkg.
+        stage('Create Nupkg w/pdb')
 		{
            steps
 		   {
-				sh "mono /usr/lib/nuget/nuget.exe pack ./${solutionFolder}/${projectName}.nuspec -IncludeReferencedProjects -symbols -SymbolPackageFormat snupkg -OutputDirectory ./Publish -Verbosity detailed"
+				//sh "mono /usr/lib/nuget/nuget.exe pack ./${solutionFolder}/${projectName}.nuspec -IncludeReferencedProjects -Symbols -SymbolPackageFormat snupkg -OutputDirectory ./Publish -Verbosity detailed"
+				sh "mono /usr/lib/nuget/nuget.exe pack ./${solutionFolder}/${projectName}.nuspec -IncludeReferencedProjects -OutputDirectory ./Publish -Verbosity detailed"
            }
 		}
-        stage('Publish to Local Nuget')
+        stage('Publish Nupkg')
 		{
            steps
 		   {
-				sh "dotnet nuget push -s http://192.168.1.161:8080/v3/index.json './Publish/${projectName}.${version3}.nupkg'"
-				sh "dotnet nuget push -s http://192.168.1.161:8080/v3/index.json './Publish/${projectName}.${version3}.snupkg'"
+				sh "dotnet nuget push -s https://buildtools.ogsofttech.com:8079/v3/index.json './Publish/${projectName}.${version3}.nupkg'"
            }
 		}
         stage('Publish Public Nuget')
@@ -169,6 +176,21 @@ pipeline
 				}
            }
 		}
+        stage('Create Nupkg w/snupkg')
+		{
+           steps
+		   {
+				sh "mono /usr/lib/nuget/nuget.exe pack ./${solutionFolder}/${projectName}.nuspec -IncludeReferencedProjects -Symbols -SymbolPackageFormat snupkg -OutputDirectory ./Publish -Verbosity detailed"
+           }
+		}
+        stage('Publish Snupkg')
+		{
+           steps
+		   {
+				sh "dotnet nuget push -s https://buildtools.ogsofttech.com:8079/v3/index.json './Publish/${projectName}.${version3}.snupkg'"
+           }
+		}
+// These next steps set the version tag in GitHub...
 		stage ('Set New Version Tag')
 		{
             steps
