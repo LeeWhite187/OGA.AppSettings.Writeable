@@ -95,7 +95,7 @@ The above sample class gets the writeable appsettings config from DI (at constru
 And, it exposes a method call that reads and writes to the config instance at runtime.
 
 ### NET5 Support for Base64-Encoded Byte Arrays in Configuration.
-NET5 has no native support for base64-encoded for storing byte arrays in configuration files (like appsettings.json).
+NET5 has no native support for base64-encoded for storing byte arrays in configuration files (such as, appsettings.json).
 See: https://github.com/dotnet/runtime/issues/36034
 This library includes a type converter to add support for that, based on the example listed here: https://github.com/dotnet/runtime/issues/37384#:~:text=ericstj%20commented%20on%20Jul%207%2C%202020
 
