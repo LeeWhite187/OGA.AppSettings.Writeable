@@ -66,14 +66,21 @@ namespace OGA.AppSettings.Writeable.JSONConfig
                 case JTokenType.Float:
                 case JTokenType.String:
                 case JTokenType.Boolean:
-                case JTokenType.Bytes:
                 case JTokenType.Raw:
+                case JTokenType.Guid:
                 case JTokenType.Null:
                     VisitPrimitive(token.Value<JValue>());
                     break;
 
+                case JTokenType.Bytes:
+				case JTokenType.Date:
+				case JTokenType.TimeSpan:
+				case JTokenType.Uri:
+					VisitSerializablePrimitive(token.Value<JValue>());
+					break;
+
                 default:
-                    throw new FormatException(Resources.FormatError_UnsupportedJSONToken("", "", "", ""));
+                    throw new FormatException(Resources.FormatError_UnsupportedJSONTokenType(token.Type));
                     //throw new FormatException(Resources.FormatError_UnsupportedJSONToken(
                     //    _reader.TokenType,
                     //    _reader.Path,
@@ -82,6 +89,19 @@ namespace OGA.AppSettings.Writeable.JSONConfig
             }
         }
 
+		private void VisitSerializablePrimitive(JValue data)
+		{
+			var key = _currentPath;
+
+			if (_data.ContainsKey(key))
+			{
+				throw new FormatException(Resources.FormatError_KeyIsDuplicated(key));
+			}
+
+			var jsonValue = JsonConvert.SerializeObject(data.Value);
+			_data[key] = jsonValue.Replace("\"", "");
+		}
+        
         private void VisitArray(JArray array)
         {
             for (int index = 0; index < array.Count; index++)

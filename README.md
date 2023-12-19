@@ -1,5 +1,6 @@
 # OGA.AppSettings.Writeable
-Provides write access to Json files loaded by ConfigurationBuilder
+Provides write access to Json files loaded by ConfigurationBuilder.
+Also included is NET5 support for base64-encoded byte arrays, stored in configuration (such as appsettings.json). See Below.
 
 ## Description
 This library contains the classes and logic necessary for runtime-update of json config files that are consumed by ConfigurationBuilder.
@@ -19,6 +20,16 @@ It also requires a framework reference to: Microsoft.AspNetCore.App
 ## Usage
 Editing json-file configuration at runtime, requires that associated FileProvider instances be writable, and that DI-registered config instances are writable.
 Once that is done, mappable config properties can be updated at runtime.
+
+### NET5 Support for Base64-Encoded Byte Arrays in Configuration.
+NET5 has no native support for base64-encoded for storing byte arrays in configuration files (like appsettings.json).
+See: https://github.com/dotnet/runtime/issues/36034
+This library includes a type converter to add support for that, based on the example listed here: https://github.com/dotnet/runtime/issues/37384#:~:text=ericstj%20commented%20on%20Jul%207%2C%202020
+
+To enable NET5 support for base-64 encoded byte arrays, run this static call, in your program.cs, somewhere before the Configuration Builder executes:
+```
+        OGA.AppSettings.Writeable.NET5_Workarounds.NET5_Base64ByteArrayStorageSupport.Add_Base64StorageSupport_forByteArray_in_NET5();
+```
 
 ### Writable FileProvider Setup
 To set file providers for json config files as writeable, we can add them as writeable, or convert loaded ones to writeable.

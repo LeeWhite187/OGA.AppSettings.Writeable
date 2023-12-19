@@ -208,7 +208,7 @@ pipeline
 				def jobName = env.JOB_NAME
 				def buildNumber = env.BUILD_NUMBER
 
-				def requestBody =
+				notificationbody =
 				[
 					job: jobName,
 					jobtype: 'build',
@@ -237,7 +237,7 @@ pipeline
 				def jobName = env.JOB_NAME
 				def buildNumber = env.BUILD_NUMBER
 
-				def requestBody =
+				notificationbody =
 				[
 					job: jobName,
 					jobtype: 'build',

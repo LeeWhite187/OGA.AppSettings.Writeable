@@ -9,5 +9,13 @@
     <Import_RootNamespace>OGA.AppSettings.Writeable_Tests</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Assembly_Tests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HelperClasses\AppConfigClasses.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HelperClasses\SampleClassTypes.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HelperClasses\Service_Mock_B.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HelperClasses\Service_Mock_A.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AppSettingsWriteable_IntegrationTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AssemblyBase_Tests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Project_TestBase.cs" />
   </ItemGroup>
 </Project>
