@@ -1,5 +1,5 @@
 # OGA.AppSettings.Writeable
-Provides write access to Json files loaded by ConfigurationBuilder.
+Provides runtime write access to Json files loaded by ConfigurationBuilder.
 Also included is NET5 support for base64-encoded byte arrays, stored in configuration (such as appsettings.json). See Below.
 
 ## Description
