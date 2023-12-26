@@ -27,7 +27,7 @@ To set file providers for json config files as writeable, we can add them as wri
 #### Explicitly Add Writeable Json Config File
 If you have additional json files that you want loaded by ConfigurationBuilder, and be runtime editable, you can add them during configuration build.
 For example, the following snippet adds a json file (in the exe folder) named, 'config.json', and makes it runtime editable:
-```
+``` cs
             .ConfigureAppConfiguration((hostingContext, config) =>
             {
                         // Add config.json file as runtime editable...
@@ -38,7 +38,7 @@ For example, the following snippet adds a json file (in the exe folder) named, '
 #### Convert Existing Json Config File to Writeable
 If you want to allow runtime editing of json settings files that are automatically loaded by the runtime (such as appsettings.json), you will need to run the following replacer method call, from inside the lambda of the ConfigureAppConfiguration method.
 Here's an example of what that looks like:
-```
+``` cs
             // This call adds in our Writeable JSON config file...
             .ConfigureAppConfiguration((hostingContext, config) =>
             {
@@ -51,7 +51,7 @@ Here's an example of what that looks like:
 With the file providers of json config files set to writeable by one of the two above methods, you then need to DI-register the config class instances as writeable.
 This is done using the ConfigureWritable extension method, in startup.cs.
 For example, the following snippet (from startup.cs) retrieves a section of configuration, maps it to an app path class, and registers it as writeable with DI:
-```
+``` cs
             // Get application path configuration so that it's available to the process...
             IConfigurationSection apc = Configuration.GetSection(cConfig_AppPaths.CONSTANT_SectionName);
             services.ConfigureWritable<cConfig_AppPaths>(apc);
@@ -63,7 +63,7 @@ Recalling config data from DI, comes in the form of IOptions instances.\
 In the case of writeable config, we recall config data with IWritableOptions.
 
 For example, the following is a simple class that uses DI to get an instance of writeable config, and read and write to it.
-```
+``` cs
     public class SampleService
     {
         // Keep a local copy of the writeable options instance...
@@ -100,7 +100,7 @@ See: https://github.com/dotnet/runtime/issues/36034
 This library includes a type converter to add support for that, based on the example listed here: https://github.com/dotnet/runtime/issues/37384#:~:text=ericstj%20commented%20on%20Jul%207%2C%202020
 
 To enable NET5 support for base-64 encoded byte arrays, run this static call, in your program.cs, somewhere before the Configuration Builder executes:
-```
+``` cs
         OGA.AppSettings.Writeable.NET5_Workarounds.NET5_Base64ByteArrayStorageSupport.Add_Base64StorageSupport_forByteArray_in_NET5();
 ```
 
