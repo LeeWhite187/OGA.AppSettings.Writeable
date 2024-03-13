@@ -128,7 +128,7 @@ pipeline
                //sh "dotnet restore '${projectFolder}_NET47/${projectName}_NET47.csproj' --configfile '/projects/config/nuget/NuGet.Config'"
                sh "dotnet restore '${projectFolder}_NET5/${projectName}_NET5.csproj' --configfile '/projects/config/nuget/NuGet.Config'"
                sh "dotnet restore '${projectFolder}_NET6/${projectName}_NET6.csproj' --configfile '/projects/config/nuget/NuGet.Config'"
-               sh "dotnet restore '${projectFolder}_NET7/${projectName}_N_NET7ET6.csproj' --configfile '/projects/config/nuget/NuGet.Config'"
+               sh "dotnet restore '${projectFolder}_NET7/${projectName}_NET7.csproj' --configfile '/projects/config/nuget/NuGet.Config'"
            }
 		}
         stage('Build-Linux')
