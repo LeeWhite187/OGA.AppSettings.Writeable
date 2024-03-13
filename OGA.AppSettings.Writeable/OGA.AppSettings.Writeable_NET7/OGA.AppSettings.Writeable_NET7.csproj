@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <Target Name="PreparePackageReleaseNotesFromFile" BeforeTargets="GenerateNuspec">
     <ReadLinesFromFile File="../OGA.AppSettings.Writeable-RELEASE-NOTES.txt">
@@ -9,17 +9,8 @@
     </PropertyGroup>
   </Target>
 
-    <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <!-- NoWarn below suppresses NETSDK1138 project-wide -->
-    <!-- This suppresses the IDE warning that NET5.0 is out of support. -->
-    <NoWarn>$(NoWarn);NETSDK1138</NoWarn>
-    <RootNamespace>OGA.AppSettings.Writeable</RootNamespace>
-    <AssemblyName>OGA.AppSettings.Writeable</AssemblyName>
-  </PropertyGroup>
-
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <Configurations>DebugWin;ReleaseWin;DebugLinux;ReleaseLinux</Configurations>
     <Version>1.3.1</Version>
     <AssemblyVersion>1.3.13.1</AssemblyVersion>
@@ -28,6 +19,7 @@
     <Product>OGA Writeable AppSettings</Product>
     <PackageId>OGA.AppSettings.Writeable</PackageId>
     <Authors>Lee White</Authors>
+    <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <IncludeSymbols>true</IncludeSymbols>
@@ -40,24 +32,23 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="$(Configuration.EndsWith('Win'))">
-    <DefineConstants>$(DefineConstants);Windows;NET5</DefineConstants>
+    <DefineConstants>$(DefineConstants);Windows;NET7</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="$(Configuration.EndsWith('Linux'))">
-    <DefineConstants>$(DefineConstants);Linux;NET5</DefineConstants>
+    <DefineConstants>$(DefineConstants);Linux;NET7</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="$(Configuration.EndsWith('OSX'))">
-    <DefineConstants>$(DefineConstants);OSX;NET5</DefineConstants>
+    <DefineConstants>$(DefineConstants);OSX;NET7</DefineConstants>
   </PropertyGroup>
-
 
   <Import Project="..\OGA.AppSettings.Writeable_SP\OGA.AppSettings.Writeable_SP.projitems" Label="Shared" />
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
-
+  
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="OGA.SharedKernel" Version="3.2.4" />
