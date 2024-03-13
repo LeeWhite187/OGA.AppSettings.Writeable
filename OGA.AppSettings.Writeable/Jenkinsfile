@@ -1,4 +1,13 @@
 // Jenkins - Build and Publish Pipeline for Cross-Platform Binaries
+//	Rev:	3
+//	Date:	20240313
+//	Changes:	Split the nuget package generation, into separate steps.
+//				This allows us to generate a nupkg file with pdb, and create a snupkg file (for a symbol server).
+//				Disabled ability to publish to Azure Artifacts.
+//				Added steps to publish to both local nuget and public nuget servers.
+//	Rev:	2
+//	Date:	20230821
+//	Changes:	Updated to publish pakages to Azure Artifacts.
 //	Rev:	1
 //	Date:	20220930
 //	Changes:	This version was updated to accept an additional variable from Jenkins, for the target framework.
