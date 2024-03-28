@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OGA.AppSettings.Writeable_N
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OGA.AppSettings.Writeable_NET7", "OGA.AppSettings.Writeable_NET7\OGA.AppSettings.Writeable_NET7.csproj", "{16D4D4AA-B2C5-40E5-A36C-112A606188AA}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OGA.AppSettings.Writeable_NET7_Tests", "OGA.AppSettings.Writeable_NET7_Tests\OGA.AppSettings.Writeable_NET7_Tests.csproj", "{6D59AE91-0A2E-4892-A234-AC66585597A9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -101,6 +103,18 @@ Global
 		{16D4D4AA-B2C5-40E5-A36C-112A606188AA}.ReleaseLinux|Any CPU.Build.0 = ReleaseLinux|Any CPU
 		{16D4D4AA-B2C5-40E5-A36C-112A606188AA}.ReleaseWin|Any CPU.ActiveCfg = ReleaseWin|Any CPU
 		{16D4D4AA-B2C5-40E5-A36C-112A606188AA}.ReleaseWin|Any CPU.Build.0 = ReleaseWin|Any CPU
+		{6D59AE91-0A2E-4892-A234-AC66585597A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D59AE91-0A2E-4892-A234-AC66585597A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D59AE91-0A2E-4892-A234-AC66585597A9}.DebugLinux|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D59AE91-0A2E-4892-A234-AC66585597A9}.DebugLinux|Any CPU.Build.0 = Debug|Any CPU
+		{6D59AE91-0A2E-4892-A234-AC66585597A9}.DebugWin|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D59AE91-0A2E-4892-A234-AC66585597A9}.DebugWin|Any CPU.Build.0 = Debug|Any CPU
+		{6D59AE91-0A2E-4892-A234-AC66585597A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D59AE91-0A2E-4892-A234-AC66585597A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D59AE91-0A2E-4892-A234-AC66585597A9}.ReleaseLinux|Any CPU.ActiveCfg = Release|Any CPU
+		{6D59AE91-0A2E-4892-A234-AC66585597A9}.ReleaseLinux|Any CPU.Build.0 = Release|Any CPU
+		{6D59AE91-0A2E-4892-A234-AC66585597A9}.ReleaseWin|Any CPU.ActiveCfg = Release|Any CPU
+		{6D59AE91-0A2E-4892-A234-AC66585597A9}.ReleaseWin|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -112,6 +126,7 @@ Global
 		OGA.AppSettings.Writeable_SP\OGA.AppSettings.Writeable_SP.projitems*{16d4d4aa-b2c5-40e5-a36c-112a606188aa}*SharedItemsImports = 5
 		OGA.AppSettings.Writeable_SP\OGA.AppSettings.Writeable_SP.projitems*{194fd2bf-c004-46f8-a9c7-b5cded998f8a}*SharedItemsImports = 5
 		OGA.AppSettings.Writeable_Tests_SP\OGA.AppSettings.Writeable_Tests_SP.projitems*{5e76947c-40dc-4894-9daa-4c6b41df26c2}*SharedItemsImports = 13
+		OGA.AppSettings.Writeable_Tests_SP\OGA.AppSettings.Writeable_Tests_SP.projitems*{6d59ae91-0a2e-4892-a234-ac66585597a9}*SharedItemsImports = 5
 		OGA.AppSettings.Writeable_SP\OGA.AppSettings.Writeable_SP.projitems*{7430013c-50cc-4e57-ab49-913b2a201a78}*SharedItemsImports = 13
 		OGA.AppSettings.Writeable_Tests_SP\OGA.AppSettings.Writeable_Tests_SP.projitems*{7a662fae-dd13-426f-b41a-68b1e6840562}*SharedItemsImports = 5
 		OGA.AppSettings.Writeable_Tests_SP\OGA.AppSettings.Writeable_Tests_SP.projitems*{e027b3f3-9b32-4fbf-8f3a-2ca6d0d933b6}*SharedItemsImports = 5

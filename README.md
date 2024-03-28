@@ -112,8 +112,8 @@ It contains multiple projects, one for each of the following frameworks:
 * NET 7
 
 And, the output nuget package includes runtimes targets for:
-* linux-64
-* win-x64
+* linux-any
+* win-any
 
 ## Framework and Runtime Support
 Currently, the nuget package of this library supports the framework versions and runtimes of applications that I maintain (see above).

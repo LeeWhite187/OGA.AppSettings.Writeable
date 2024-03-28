@@ -135,22 +135,22 @@ pipeline
 		{
            steps
 		   {
-				//sh "dotnet build '${projectFolder}_NET452/${projectName}_NET452.csproj' -c DebugLinux --runtime linux-x64 --no-self-contained"
-				//sh "dotnet build '${projectFolder}_NET47/${projectName}_NET47.csproj' -c DebugLinux --runtime linux-x64 --no-self-contained"
-				sh "dotnet build '${projectFolder}_NET5/${projectName}_NET5.csproj' -c DebugLinux --runtime linux-x64 --no-self-contained"
-				sh "dotnet build '${projectFolder}_NET6/${projectName}_NET6.csproj' -c DebugLinux --runtime linux-x64 --no-self-contained"
-				sh "dotnet build '${projectFolder}_NET7/${projectName}_NET7.csproj' -c DebugLinux --runtime linux-x64 --no-self-contained"
+				//sh "dotnet build '${projectFolder}_NET452/${projectName}_NET452.csproj' -c DebugLinux --runtime linux --no-self-contained"
+				//sh "dotnet build '${projectFolder}_NET47/${projectName}_NET47.csproj' -c DebugLinux --runtime linux --no-self-contained"
+				sh "dotnet build '${projectFolder}_NET5/${projectName}_NET5.csproj' -c DebugLinux --runtime linux --no-self-contained"
+				sh "dotnet build '${projectFolder}_NET6/${projectName}_NET6.csproj' -c DebugLinux --runtime linux --no-self-contained"
+				sh "dotnet build '${projectFolder}_NET7/${projectName}_NET7.csproj' -c DebugLinux --runtime linux --no-self-contained"
            }
 		}
         stage('Build-Windows')
 		{
            steps
 		   {
-				//sh "dotnet build '${projectFolder}_NET452/${projectName}_NET452.csproj' -c DebugWin --runtime win-x64 --no-self-contained"
-				//sh "dotnet build '${projectFolder}_NET47/${projectName}_NET47.csproj' -c DebugWin --runtime win-x64 --no-self-contained"
-				sh "dotnet build '${projectFolder}_NET5/${projectName}_NET5.csproj' -c DebugWin --runtime win-x64 --no-self-contained"
-				sh "dotnet build '${projectFolder}_NET6/${projectName}_NET6.csproj' -c DebugWin --runtime win-x64 --no-self-contained"
-				sh "dotnet build '${projectFolder}_NET7/${projectName}_NET7.csproj' -c DebugWin --runtime win-x64 --no-self-contained"
+				//sh "dotnet build '${projectFolder}_NET452/${projectName}_NET452.csproj' -c DebugWin --runtime win --no-self-contained"
+				//sh "dotnet build '${projectFolder}_NET47/${projectName}_NET47.csproj' -c DebugWin --runtime win --no-self-contained"
+				sh "dotnet build '${projectFolder}_NET5/${projectName}_NET5.csproj' -c DebugWin --runtime win --no-self-contained"
+				sh "dotnet build '${projectFolder}_NET6/${projectName}_NET6.csproj' -c DebugWin --runtime win --no-self-contained"
+				sh "dotnet build '${projectFolder}_NET7/${projectName}_NET7.csproj' -c DebugWin --runtime win --no-self-contained"
            }
 		}
 // ************************** NOTE: These packaging steps include publishing to nuget.org. *************************
