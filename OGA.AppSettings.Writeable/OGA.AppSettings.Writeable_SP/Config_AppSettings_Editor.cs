@@ -184,9 +184,12 @@ namespace OGA.AppSettings.Writeable
                     return -1;
                 }
 
-                // Set the builder to look in the exe folder...
+                // Get the parent folder of the given config file path...
+                var cfgfile_folderpath = System.IO.Directory.GetParent(configfilepath).FullName;
+
+                // Create the configuration builder, and point it to the folder path of the config file...
                 var builder = new ConfigurationBuilder();
-                builder.SetBasePath(AppDomain.CurrentDomain.BaseDirectory);
+                builder.SetBasePath(cfgfile_folderpath);
 
                 // Tell it to load the file with our app paths...
                 builder.AddWriteableJsonFile(configfilepath, optional: true, reloadOnChange: true);
