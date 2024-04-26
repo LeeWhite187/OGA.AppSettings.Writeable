@@ -15,7 +15,5 @@
     <Compile Include="$(MSBuildThisFileDirectory)HelperClasses\Service_Mock_B.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HelperClasses\Service_Mock_A.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)AppSettingsWriteable_IntegrationTests.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)AssemblyBase_Tests.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Project_TestBase.cs" />
   </ItemGroup>
 </Project>

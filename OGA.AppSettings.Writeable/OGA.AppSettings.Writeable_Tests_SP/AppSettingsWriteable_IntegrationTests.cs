@@ -7,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OGA.AppSettings.Writeable.JSONConfig;
 using OGA.AppSettings.Writeable_Tests.HelperClasses;
+using OGA.Testing.Helpers;
+using OGA.Testing.Lib;
 
 namespace OGA.AppSettings.Writeable_Tests
 {
@@ -60,45 +62,56 @@ namespace OGA.AppSettings.Writeable_Tests
     */
 
 
+    [TestCategory(Test_Types.Unit_Tests)]
     [TestClass]
-    public class AppSettingsWriteable_IntegrationTests : Project_TestBase
+    public class AppSettingsWriteable_IntegrationTests : Test_Base_abstract
     {
-        #region Private Fields
-
-        #endregion
-
-
-        #region ctor / dtor
-
-        public AppSettingsWriteable_IntegrationTests()
-        {
-            _classname = nameof(AppSettingsWriteable_IntegrationTests);
-        }
-
-        #endregion
-
-
         #region Setup
 
+        /// <summary>
+        /// This will perform any test setup before the first class tests start.
+        /// This exists, because MSTest won't call the class setup method in a base class.
+        /// Be sure this method exists in your top-level test class, and that it calls the corresponding test class setup method of the base.
+        /// </summary>
+        [ClassInitialize]
+        static public void TestClass_Setup(TestContext context)
+        {
+            TestClassBase_Setup(context);
+        }
+        /// <summary>
+        /// This will cleanup resources after all class tests have completed.
+        /// This exists, because MSTest won't call the class cleanup method in a base class.
+        /// Be sure this method exists in your top-level test class, and that it calls the corresponding test class cleanup method of the base.
+        /// </summary>
+        [ClassCleanup]
+        static public void TestClass_Cleanup()
+        {
+            TestClassBase_Cleanup();
+        }
+
+        /// <summary>
+        /// Called before each test runs.
+        /// Be sure this method exists in your top-level test class, and that it calls the corresponding test setup method of the base.
+        /// </summary>
         [TestInitialize]
         override public void Setup()
         {
+            //// Push the TestContext instance that we received at the start of the current test, into the common property of the test base class...
+            //Test_Base.TestContext = TestContext;
+
             base.Setup();
-
-            OGA.SharedKernel.Logging_Base.Logger_Ref?.Info(
-                $"{_classname}:::{nameof(Setup)} - " +
-                $"Base Setup done.");
-
 
             // Runs before each test. (Optional)
         }
 
+        /// <summary>
+        /// Called after each test runs.
+        /// Be sure this method exists in your top-level test class, and that it calls the corresponding test cleanup method of the base.
+        /// </summary>
         [TestCleanup]
         override public void TearDown()
         {
             // Runs after each test. (Optional)
-
-            base.TearDown();
         }
 
         #endregion
@@ -123,39 +136,39 @@ namespace OGA.AppSettings.Writeable_Tests
             AppSettingsConfigRoot originalsettingsconfig;
             {
                 originalsettingsconfig = new AppSettingsConfigRoot();
-                originalsettingsconfig.Paths.LogPath = CreateRandomString();
-                originalsettingsconfig.Paths.CommonConfigPath = CreateRandomString();
-                originalsettingsconfig.Paths.AppConfigPath = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.Default = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.Microsoft = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.Microsoft_AspNetCore_Http_Connections = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.Microsoft_AspNetCore_SignalR = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.System = CreateRandomString();
-                originalsettingsconfig.Avatar_Store = CreateRandomString();
-                originalsettingsconfig.AllowedHosts = CreateRandomString();
-                originalsettingsconfig.SQLServerConfig.ConnectionString = CreateRandomString();
+                originalsettingsconfig.Paths.LogPath = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Paths.CommonConfigPath = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Paths.AppConfigPath = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.Default = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.Microsoft = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.Microsoft_AspNetCore_Http_Connections = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.Microsoft_AspNetCore_SignalR = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.System = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Avatar_Store = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.AllowedHosts = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.SQLServerConfig.ConnectionString = RandomValueGenerators.CreateRandomString();
 
-                originalsettingsconfig.BuildData.RepoType = CreateRandomString();
-                originalsettingsconfig.BuildData.Source_Revision = CreateRandomString();
-                originalsettingsconfig.BuildData.Source_SolutionSubFolder = CreateRandomString();
-                originalsettingsconfig.BuildData.Source_URL = CreateRandomString();
+                originalsettingsconfig.BuildData.RepoType = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.Source_Revision = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.Source_SolutionSubFolder = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.Source_URL = RandomValueGenerators.CreateRandomString();
 
                 // Baseline values of different types, that will be individually changed in separate tests...
-                originalsettingsconfig.BuildData.stringVal = CreateRandomString();
-                originalsettingsconfig.BuildData.intVal = CreateRandomInt();
-                originalsettingsconfig.BuildData.floatVal = CreateRandomFloat();
-                originalsettingsconfig.BuildData.boolVal = CreateRandomBool();
-                originalsettingsconfig.BuildData.guidVal = CreateRandomGuid();
-                originalsettingsconfig.BuildData.datetimeVal = CreateRandomDateTime();
-                originalsettingsconfig.BuildData.bytesVal = CreateRandomByteArray(100);
-                originalsettingsconfig.BuildData.timespanVal = CreateRandomTimespan();
-                originalsettingsconfig.BuildData.uriVal = CreateRandomUrl();
+                originalsettingsconfig.BuildData.stringVal = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.intVal =  RandomValueGenerators.CreateRandomInt();
+                originalsettingsconfig.BuildData.floatVal =  RandomValueGenerators.CreateRandomFloat();
+                originalsettingsconfig.BuildData.boolVal = RandomValueGenerators.CreateRandomBool();
+                originalsettingsconfig.BuildData.guidVal = RandomValueGenerators.CreateRandomGuid();
+                originalsettingsconfig.BuildData.datetimeVal = RandomValueGenerators.CreateRandomDateTime();
+                originalsettingsconfig.BuildData.bytesVal = RandomValueGenerators.CreateRandomByteArray(100);
+                originalsettingsconfig.BuildData.timespanVal = RandomValueGenerators.CreateRandomTimespan();
+                originalsettingsconfig.BuildData.uriVal = RandomValueGenerators.CreateRandomUrl();
             }
 
 
             // We are testing that a string config value can be updated across the app and in stored appsettings.json.
             // Assign the original value under test...
-            originalsettingsconfig.BuildData.stringVal = CreateRandomString();
+            originalsettingsconfig.BuildData.stringVal = RandomValueGenerators.CreateRandomString();
 
 
             // Make a copy of the settings data, that we can update to track changes we make and verify they are mirrored by the settings classes under test....
@@ -239,7 +252,7 @@ namespace OGA.AppSettings.Writeable_Tests
                 };
 
                 // Standup the root-scoped service provider...
-                svcprov = Setup_DIProvider(didelegate);
+                svcprov = ServiceProviderHelper.Setup_DIProvider(didelegate);
             }
 
 
@@ -306,38 +319,38 @@ namespace OGA.AppSettings.Writeable_Tests
             AppSettingsConfigRoot originalsettingsconfig;
             {
                 originalsettingsconfig = new AppSettingsConfigRoot();
-                originalsettingsconfig.Paths.LogPath = CreateRandomString();
-                originalsettingsconfig.Paths.CommonConfigPath = CreateRandomString();
-                originalsettingsconfig.Paths.AppConfigPath = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.Default = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.Microsoft = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.Microsoft_AspNetCore_Http_Connections = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.Microsoft_AspNetCore_SignalR = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.System = CreateRandomString();
-                originalsettingsconfig.Avatar_Store = CreateRandomString();
-                originalsettingsconfig.AllowedHosts = CreateRandomString();
-                originalsettingsconfig.SQLServerConfig.ConnectionString = CreateRandomString();
-                originalsettingsconfig.BuildData.RepoType = CreateRandomString();
-                originalsettingsconfig.BuildData.Source_Revision = CreateRandomString();
-                originalsettingsconfig.BuildData.Source_SolutionSubFolder = CreateRandomString();
-                originalsettingsconfig.BuildData.Source_URL = CreateRandomString();
+                originalsettingsconfig.Paths.LogPath = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Paths.CommonConfigPath = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Paths.AppConfigPath = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.Default = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.Microsoft = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.Microsoft_AspNetCore_Http_Connections = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.Microsoft_AspNetCore_SignalR = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.System = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Avatar_Store = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.AllowedHosts = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.SQLServerConfig.ConnectionString = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.RepoType = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.Source_Revision = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.Source_SolutionSubFolder = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.Source_URL = RandomValueGenerators.CreateRandomString();
 
                 // Baseline values of different types, that will be individually changed in separate tests...
-                originalsettingsconfig.BuildData.stringVal = CreateRandomString();
-                originalsettingsconfig.BuildData.intVal = CreateRandomInt();
-                originalsettingsconfig.BuildData.floatVal = CreateRandomFloat();
-                originalsettingsconfig.BuildData.boolVal = CreateRandomBool();
-                originalsettingsconfig.BuildData.guidVal = CreateRandomGuid();
-                originalsettingsconfig.BuildData.datetimeVal = CreateRandomDateTime();
-                originalsettingsconfig.BuildData.bytesVal = CreateRandomByteArray(100);
-                originalsettingsconfig.BuildData.timespanVal = CreateRandomTimespan();
-                originalsettingsconfig.BuildData.uriVal = CreateRandomUrl();
+                originalsettingsconfig.BuildData.stringVal = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.intVal =  RandomValueGenerators.CreateRandomInt();
+                originalsettingsconfig.BuildData.floatVal =  RandomValueGenerators.CreateRandomFloat();
+                originalsettingsconfig.BuildData.boolVal = RandomValueGenerators.CreateRandomBool();
+                originalsettingsconfig.BuildData.guidVal = RandomValueGenerators.CreateRandomGuid();
+                originalsettingsconfig.BuildData.datetimeVal = RandomValueGenerators.CreateRandomDateTime();
+                originalsettingsconfig.BuildData.bytesVal = RandomValueGenerators.CreateRandomByteArray(100);
+                originalsettingsconfig.BuildData.timespanVal = RandomValueGenerators.CreateRandomTimespan();
+                originalsettingsconfig.BuildData.uriVal = RandomValueGenerators.CreateRandomUrl();
             }
 
 
             // We are testing that a string config value can be updated across the app and in stored appsettings.json.
             // Assign the original value under test...
-            originalsettingsconfig.BuildData.stringVal = CreateRandomString();
+            originalsettingsconfig.BuildData.stringVal = RandomValueGenerators.CreateRandomString();
 
 
             // Make a copy of the settings data, that we can update to track changes we make and verify they are mirrored by the settings classes under test....
@@ -421,7 +434,7 @@ namespace OGA.AppSettings.Writeable_Tests
                 };
 
                 // Standup the root-scoped service provider...
-                svcprov = Setup_DIProvider(didelegate);
+                svcprov = ServiceProviderHelper.Setup_DIProvider(didelegate);
             }
 
 
@@ -488,38 +501,38 @@ namespace OGA.AppSettings.Writeable_Tests
             AppSettingsConfigRoot originalsettingsconfig;
             {
                 originalsettingsconfig = new AppSettingsConfigRoot();
-                originalsettingsconfig.Paths.LogPath = CreateRandomString();
-                originalsettingsconfig.Paths.CommonConfigPath = CreateRandomString();
-                originalsettingsconfig.Paths.AppConfigPath = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.Default = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.Microsoft = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.Microsoft_AspNetCore_Http_Connections = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.Microsoft_AspNetCore_SignalR = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.System = CreateRandomString();
-                originalsettingsconfig.Avatar_Store = CreateRandomString();
-                originalsettingsconfig.AllowedHosts = CreateRandomString();
-                originalsettingsconfig.SQLServerConfig.ConnectionString = CreateRandomString();
-                originalsettingsconfig.BuildData.RepoType = CreateRandomString();
-                originalsettingsconfig.BuildData.Source_Revision = CreateRandomString();
-                originalsettingsconfig.BuildData.Source_SolutionSubFolder = CreateRandomString();
-                originalsettingsconfig.BuildData.Source_URL = CreateRandomString();
+                originalsettingsconfig.Paths.LogPath = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Paths.CommonConfigPath = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Paths.AppConfigPath = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.Default = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.Microsoft = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.Microsoft_AspNetCore_Http_Connections = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.Microsoft_AspNetCore_SignalR = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.System = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Avatar_Store = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.AllowedHosts = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.SQLServerConfig.ConnectionString = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.RepoType = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.Source_Revision = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.Source_SolutionSubFolder = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.Source_URL = RandomValueGenerators.CreateRandomString();
 
                 // Baseline values of different types, that will be individually changed in separate tests...
-                originalsettingsconfig.BuildData.stringVal = CreateRandomString();
-                originalsettingsconfig.BuildData.intVal = CreateRandomInt();
-                originalsettingsconfig.BuildData.floatVal = CreateRandomFloat();
-                originalsettingsconfig.BuildData.boolVal = CreateRandomBool();
-                originalsettingsconfig.BuildData.guidVal = CreateRandomGuid();
-                originalsettingsconfig.BuildData.datetimeVal = CreateRandomDateTime();
-                originalsettingsconfig.BuildData.bytesVal = CreateRandomByteArray(100);
-                originalsettingsconfig.BuildData.timespanVal = CreateRandomTimespan();
-                originalsettingsconfig.BuildData.uriVal = CreateRandomUrl();
+                originalsettingsconfig.BuildData.stringVal = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.intVal =  RandomValueGenerators.CreateRandomInt();
+                originalsettingsconfig.BuildData.floatVal =  RandomValueGenerators.CreateRandomFloat();
+                originalsettingsconfig.BuildData.boolVal = RandomValueGenerators.CreateRandomBool();
+                originalsettingsconfig.BuildData.guidVal = RandomValueGenerators.CreateRandomGuid();
+                originalsettingsconfig.BuildData.datetimeVal = RandomValueGenerators.CreateRandomDateTime();
+                originalsettingsconfig.BuildData.bytesVal = RandomValueGenerators.CreateRandomByteArray(100);
+                originalsettingsconfig.BuildData.timespanVal = RandomValueGenerators.CreateRandomTimespan();
+                originalsettingsconfig.BuildData.uriVal = RandomValueGenerators.CreateRandomUrl();
             }
 
 
             // We are testing that an integer config value can be updated across the app and in stored appsettings.json.
             // Assign the original value under test...
-            originalsettingsconfig.BuildData.intVal = CreateRandomInt();
+            originalsettingsconfig.BuildData.intVal =  RandomValueGenerators.CreateRandomInt();
 
 
             // Make a copy of the settings data, that we can update to track changes we make and verify they are mirrored by the settings classes under test....
@@ -603,7 +616,7 @@ namespace OGA.AppSettings.Writeable_Tests
                 };
 
                 // Standup the root-scoped service provider...
-                svcprov = Setup_DIProvider(didelegate);
+                svcprov = ServiceProviderHelper.Setup_DIProvider(didelegate);
             }
 
 
@@ -613,7 +626,7 @@ namespace OGA.AppSettings.Writeable_Tests
 
 
             // Determine a new value...
-            int updatedvalue = CreateRandomInt();
+            int updatedvalue =  RandomValueGenerators.CreateRandomInt();
             // Update our tracking copy for simple comparison...
             trackingconfig.BuildData.intVal = updatedvalue;
 
@@ -670,38 +683,38 @@ namespace OGA.AppSettings.Writeable_Tests
             AppSettingsConfigRoot originalsettingsconfig;
             {
                 originalsettingsconfig = new AppSettingsConfigRoot();
-                originalsettingsconfig.Paths.LogPath = CreateRandomString();
-                originalsettingsconfig.Paths.CommonConfigPath = CreateRandomString();
-                originalsettingsconfig.Paths.AppConfigPath = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.Default = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.Microsoft = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.Microsoft_AspNetCore_Http_Connections = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.Microsoft_AspNetCore_SignalR = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.System = CreateRandomString();
-                originalsettingsconfig.Avatar_Store = CreateRandomString();
-                originalsettingsconfig.AllowedHosts = CreateRandomString();
-                originalsettingsconfig.SQLServerConfig.ConnectionString = CreateRandomString();
-                originalsettingsconfig.BuildData.RepoType = CreateRandomString();
-                originalsettingsconfig.BuildData.Source_Revision = CreateRandomString();
-                originalsettingsconfig.BuildData.Source_SolutionSubFolder = CreateRandomString();
-                originalsettingsconfig.BuildData.Source_URL = CreateRandomString();
+                originalsettingsconfig.Paths.LogPath = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Paths.CommonConfigPath = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Paths.AppConfigPath = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.Default = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.Microsoft = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.Microsoft_AspNetCore_Http_Connections = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.Microsoft_AspNetCore_SignalR = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.System = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Avatar_Store = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.AllowedHosts = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.SQLServerConfig.ConnectionString = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.RepoType = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.Source_Revision = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.Source_SolutionSubFolder = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.Source_URL = RandomValueGenerators.CreateRandomString();
 
                 // Baseline values of different types, that will be individually changed in separate tests...
-                originalsettingsconfig.BuildData.stringVal = CreateRandomString();
-                originalsettingsconfig.BuildData.intVal = CreateRandomInt();
-                originalsettingsconfig.BuildData.floatVal = CreateRandomFloat();
-                originalsettingsconfig.BuildData.boolVal = CreateRandomBool();
-                originalsettingsconfig.BuildData.guidVal = CreateRandomGuid();
-                originalsettingsconfig.BuildData.datetimeVal = CreateRandomDateTime();
-                originalsettingsconfig.BuildData.bytesVal = CreateRandomByteArray(100);
-                originalsettingsconfig.BuildData.timespanVal = CreateRandomTimespan();
-                originalsettingsconfig.BuildData.uriVal = CreateRandomUrl();
+                originalsettingsconfig.BuildData.stringVal = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.intVal =  RandomValueGenerators.CreateRandomInt();
+                originalsettingsconfig.BuildData.floatVal =  RandomValueGenerators.CreateRandomFloat();
+                originalsettingsconfig.BuildData.boolVal = RandomValueGenerators.CreateRandomBool();
+                originalsettingsconfig.BuildData.guidVal = RandomValueGenerators.CreateRandomGuid();
+                originalsettingsconfig.BuildData.datetimeVal = RandomValueGenerators.CreateRandomDateTime();
+                originalsettingsconfig.BuildData.bytesVal = RandomValueGenerators.CreateRandomByteArray(100);
+                originalsettingsconfig.BuildData.timespanVal = RandomValueGenerators.CreateRandomTimespan();
+                originalsettingsconfig.BuildData.uriVal = RandomValueGenerators.CreateRandomUrl();
             }
 
 
             // We are testing that a float config value can be updated across the app and in stored appsettings.json.
             // Assign the original value under test...
-            originalsettingsconfig.BuildData.floatVal = CreateRandomFloat();
+            originalsettingsconfig.BuildData.floatVal =  RandomValueGenerators.CreateRandomFloat();
 
 
             // Make a copy of the settings data, that we can update to track changes we make and verify they are mirrored by the settings classes under test....
@@ -785,7 +798,7 @@ namespace OGA.AppSettings.Writeable_Tests
                 };
 
                 // Standup the root-scoped service provider...
-                svcprov = Setup_DIProvider(didelegate);
+                svcprov = ServiceProviderHelper.Setup_DIProvider(didelegate);
             }
 
 
@@ -795,7 +808,7 @@ namespace OGA.AppSettings.Writeable_Tests
 
 
             // Determine a new value...
-            float updatedvalue = CreateRandomFloat();
+            float updatedvalue =  RandomValueGenerators.CreateRandomFloat();
             // Update our tracking copy for simple comparison...
             trackingconfig.BuildData.floatVal = updatedvalue;
 
@@ -852,38 +865,38 @@ namespace OGA.AppSettings.Writeable_Tests
             AppSettingsConfigRoot originalsettingsconfig;
             {
                 originalsettingsconfig = new AppSettingsConfigRoot();
-                originalsettingsconfig.Paths.LogPath = CreateRandomString();
-                originalsettingsconfig.Paths.CommonConfigPath = CreateRandomString();
-                originalsettingsconfig.Paths.AppConfigPath = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.Default = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.Microsoft = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.Microsoft_AspNetCore_Http_Connections = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.Microsoft_AspNetCore_SignalR = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.System = CreateRandomString();
-                originalsettingsconfig.Avatar_Store = CreateRandomString();
-                originalsettingsconfig.AllowedHosts = CreateRandomString();
-                originalsettingsconfig.SQLServerConfig.ConnectionString = CreateRandomString();
-                originalsettingsconfig.BuildData.RepoType = CreateRandomString();
-                originalsettingsconfig.BuildData.Source_Revision = CreateRandomString();
-                originalsettingsconfig.BuildData.Source_SolutionSubFolder = CreateRandomString();
-                originalsettingsconfig.BuildData.Source_URL = CreateRandomString();
+                originalsettingsconfig.Paths.LogPath = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Paths.CommonConfigPath = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Paths.AppConfigPath = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.Default = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.Microsoft = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.Microsoft_AspNetCore_Http_Connections = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.Microsoft_AspNetCore_SignalR = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.System = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Avatar_Store = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.AllowedHosts = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.SQLServerConfig.ConnectionString = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.RepoType = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.Source_Revision = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.Source_SolutionSubFolder = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.Source_URL = RandomValueGenerators.CreateRandomString();
 
                 // Baseline values of different types, that will be individually changed in separate tests...
-                originalsettingsconfig.BuildData.stringVal = CreateRandomString();
-                originalsettingsconfig.BuildData.intVal = CreateRandomInt();
-                originalsettingsconfig.BuildData.floatVal = CreateRandomFloat();
-                originalsettingsconfig.BuildData.boolVal = CreateRandomBool();
-                originalsettingsconfig.BuildData.guidVal = CreateRandomGuid();
-                originalsettingsconfig.BuildData.datetimeVal = CreateRandomDateTime();
-                originalsettingsconfig.BuildData.bytesVal = CreateRandomByteArray(100);
-                originalsettingsconfig.BuildData.timespanVal = CreateRandomTimespan();
-                originalsettingsconfig.BuildData.uriVal = CreateRandomUrl();
+                originalsettingsconfig.BuildData.stringVal = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.intVal =  RandomValueGenerators.CreateRandomInt();
+                originalsettingsconfig.BuildData.floatVal =  RandomValueGenerators.CreateRandomFloat();
+                originalsettingsconfig.BuildData.boolVal = RandomValueGenerators.CreateRandomBool();
+                originalsettingsconfig.BuildData.guidVal = RandomValueGenerators.CreateRandomGuid();
+                originalsettingsconfig.BuildData.datetimeVal = RandomValueGenerators.CreateRandomDateTime();
+                originalsettingsconfig.BuildData.bytesVal = RandomValueGenerators.CreateRandomByteArray(100);
+                originalsettingsconfig.BuildData.timespanVal = RandomValueGenerators.CreateRandomTimespan();
+                originalsettingsconfig.BuildData.uriVal = RandomValueGenerators.CreateRandomUrl();
             }
 
 
             // We are testing that a boolean config value can be updated across the app and in stored appsettings.json.
             // Assign the original value under test...
-            originalsettingsconfig.BuildData.boolVal = CreateRandomBool();
+            originalsettingsconfig.BuildData.boolVal = RandomValueGenerators.CreateRandomBool();
 
 
             // Make a copy of the settings data, that we can update to track changes we make and verify they are mirrored by the settings classes under test....
@@ -967,7 +980,7 @@ namespace OGA.AppSettings.Writeable_Tests
                 };
 
                 // Standup the root-scoped service provider...
-                svcprov = Setup_DIProvider(didelegate);
+                svcprov = ServiceProviderHelper.Setup_DIProvider(didelegate);
             }
 
 
@@ -979,7 +992,7 @@ namespace OGA.AppSettings.Writeable_Tests
             // Determine a new value...
             // Since only two states exist for a bool, we will flip it, to ensure an update occurs.
             bool updatedvalue = !originalsettingsconfig.BuildData.boolVal;
-            //bool updatedvalue = CreateRandomBool();
+            //bool updatedvalue = RandomValueGenerators.CreateRandomBool();
             // Update our tracking copy for simple comparison...
             trackingconfig.BuildData.boolVal = updatedvalue;
 
@@ -1036,38 +1049,38 @@ namespace OGA.AppSettings.Writeable_Tests
             AppSettingsConfigRoot originalsettingsconfig;
             {
                 originalsettingsconfig = new AppSettingsConfigRoot();
-                originalsettingsconfig.Paths.LogPath = CreateRandomString();
-                originalsettingsconfig.Paths.CommonConfigPath = CreateRandomString();
-                originalsettingsconfig.Paths.AppConfigPath = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.Default = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.Microsoft = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.Microsoft_AspNetCore_Http_Connections = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.Microsoft_AspNetCore_SignalR = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.System = CreateRandomString();
-                originalsettingsconfig.Avatar_Store = CreateRandomString();
-                originalsettingsconfig.AllowedHosts = CreateRandomString();
-                originalsettingsconfig.SQLServerConfig.ConnectionString = CreateRandomString();
-                originalsettingsconfig.BuildData.RepoType = CreateRandomString();
-                originalsettingsconfig.BuildData.Source_Revision = CreateRandomString();
-                originalsettingsconfig.BuildData.Source_SolutionSubFolder = CreateRandomString();
-                originalsettingsconfig.BuildData.Source_URL = CreateRandomString();
+                originalsettingsconfig.Paths.LogPath = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Paths.CommonConfigPath = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Paths.AppConfigPath = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.Default = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.Microsoft = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.Microsoft_AspNetCore_Http_Connections = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.Microsoft_AspNetCore_SignalR = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.System = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Avatar_Store = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.AllowedHosts = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.SQLServerConfig.ConnectionString = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.RepoType = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.Source_Revision = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.Source_SolutionSubFolder = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.Source_URL = RandomValueGenerators.CreateRandomString();
 
                 // Baseline values of different types, that will be individually changed in separate tests...
-                originalsettingsconfig.BuildData.stringVal = CreateRandomString();
-                originalsettingsconfig.BuildData.intVal = CreateRandomInt();
-                originalsettingsconfig.BuildData.floatVal = CreateRandomFloat();
-                originalsettingsconfig.BuildData.boolVal = CreateRandomBool();
-                originalsettingsconfig.BuildData.guidVal = CreateRandomGuid();
-                originalsettingsconfig.BuildData.datetimeVal = CreateRandomDateTime();
-                originalsettingsconfig.BuildData.bytesVal = CreateRandomByteArray(100);
-                originalsettingsconfig.BuildData.timespanVal = CreateRandomTimespan();
-                originalsettingsconfig.BuildData.uriVal = CreateRandomUrl();
+                originalsettingsconfig.BuildData.stringVal = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.intVal =  RandomValueGenerators.CreateRandomInt();
+                originalsettingsconfig.BuildData.floatVal =  RandomValueGenerators.CreateRandomFloat();
+                originalsettingsconfig.BuildData.boolVal = RandomValueGenerators.CreateRandomBool();
+                originalsettingsconfig.BuildData.guidVal = RandomValueGenerators.CreateRandomGuid();
+                originalsettingsconfig.BuildData.datetimeVal = RandomValueGenerators.CreateRandomDateTime();
+                originalsettingsconfig.BuildData.bytesVal = RandomValueGenerators.CreateRandomByteArray(100);
+                originalsettingsconfig.BuildData.timespanVal = RandomValueGenerators.CreateRandomTimespan();
+                originalsettingsconfig.BuildData.uriVal = RandomValueGenerators.CreateRandomUrl();
             }
 
 
             // We are testing that a Guid config value can be updated across the app and in stored appsettings.json.
             // Assign the original value under test...
-            originalsettingsconfig.BuildData.guidVal = CreateRandomGuid();
+            originalsettingsconfig.BuildData.guidVal = RandomValueGenerators.CreateRandomGuid();
 
 
             // Make a copy of the settings data, that we can update to track changes we make and verify they are mirrored by the settings classes under test....
@@ -1151,7 +1164,7 @@ namespace OGA.AppSettings.Writeable_Tests
                 };
 
                 // Standup the root-scoped service provider...
-                svcprov = Setup_DIProvider(didelegate);
+                svcprov = ServiceProviderHelper.Setup_DIProvider(didelegate);
             }
 
 
@@ -1161,7 +1174,7 @@ namespace OGA.AppSettings.Writeable_Tests
 
 
             // Determine a new value...
-            Guid updatedvalue = CreateRandomGuid();
+            Guid updatedvalue = RandomValueGenerators.CreateRandomGuid();
             // Update our tracking copy for simple comparison...
             trackingconfig.BuildData.guidVal = updatedvalue;
 
@@ -1218,38 +1231,38 @@ namespace OGA.AppSettings.Writeable_Tests
             AppSettingsConfigRoot originalsettingsconfig;
             {
                 originalsettingsconfig = new AppSettingsConfigRoot();
-                originalsettingsconfig.Paths.LogPath = CreateRandomString();
-                originalsettingsconfig.Paths.CommonConfigPath = CreateRandomString();
-                originalsettingsconfig.Paths.AppConfigPath = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.Default = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.Microsoft = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.Microsoft_AspNetCore_Http_Connections = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.Microsoft_AspNetCore_SignalR = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.System = CreateRandomString();
-                originalsettingsconfig.Avatar_Store = CreateRandomString();
-                originalsettingsconfig.AllowedHosts = CreateRandomString();
-                originalsettingsconfig.SQLServerConfig.ConnectionString = CreateRandomString();
-                originalsettingsconfig.BuildData.RepoType = CreateRandomString();
-                originalsettingsconfig.BuildData.Source_Revision = CreateRandomString();
-                originalsettingsconfig.BuildData.Source_SolutionSubFolder = CreateRandomString();
-                originalsettingsconfig.BuildData.Source_URL = CreateRandomString();
+                originalsettingsconfig.Paths.LogPath = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Paths.CommonConfigPath = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Paths.AppConfigPath = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.Default = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.Microsoft = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.Microsoft_AspNetCore_Http_Connections = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.Microsoft_AspNetCore_SignalR = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.System = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Avatar_Store = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.AllowedHosts = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.SQLServerConfig.ConnectionString = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.RepoType = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.Source_Revision = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.Source_SolutionSubFolder = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.Source_URL = RandomValueGenerators.CreateRandomString();
 
                 // Baseline values of different types, that will be individually changed in separate tests...
-                originalsettingsconfig.BuildData.stringVal = CreateRandomString();
-                originalsettingsconfig.BuildData.intVal = CreateRandomInt();
-                originalsettingsconfig.BuildData.floatVal = CreateRandomFloat();
-                originalsettingsconfig.BuildData.boolVal = CreateRandomBool();
-                originalsettingsconfig.BuildData.guidVal = CreateRandomGuid();
-                originalsettingsconfig.BuildData.datetimeVal = CreateRandomDateTime();
-                originalsettingsconfig.BuildData.bytesVal = CreateRandomByteArray(100);
-                originalsettingsconfig.BuildData.timespanVal = CreateRandomTimespan();
-                originalsettingsconfig.BuildData.uriVal = CreateRandomUrl();
+                originalsettingsconfig.BuildData.stringVal = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.intVal =  RandomValueGenerators.CreateRandomInt();
+                originalsettingsconfig.BuildData.floatVal =  RandomValueGenerators.CreateRandomFloat();
+                originalsettingsconfig.BuildData.boolVal = RandomValueGenerators.CreateRandomBool();
+                originalsettingsconfig.BuildData.guidVal = RandomValueGenerators.CreateRandomGuid();
+                originalsettingsconfig.BuildData.datetimeVal = RandomValueGenerators.CreateRandomDateTime();
+                originalsettingsconfig.BuildData.bytesVal = RandomValueGenerators.CreateRandomByteArray(100);
+                originalsettingsconfig.BuildData.timespanVal = RandomValueGenerators.CreateRandomTimespan();
+                originalsettingsconfig.BuildData.uriVal = RandomValueGenerators.CreateRandomUrl();
             }
 
 
             // We are testing that a DateTime config value can be updated across the app and in stored appsettings.json.
             // Assign the original value under test...
-            originalsettingsconfig.BuildData.datetimeVal = CreateRandomDateTime();
+            originalsettingsconfig.BuildData.datetimeVal = RandomValueGenerators.CreateRandomDateTime();
 
 
             // Make a copy of the settings data, that we can update to track changes we make and verify they are mirrored by the settings classes under test....
@@ -1333,7 +1346,7 @@ namespace OGA.AppSettings.Writeable_Tests
                 };
 
                 // Standup the root-scoped service provider...
-                svcprov = Setup_DIProvider(didelegate);
+                svcprov = ServiceProviderHelper.Setup_DIProvider(didelegate);
             }
 
 
@@ -1343,7 +1356,7 @@ namespace OGA.AppSettings.Writeable_Tests
 
 
             // Determine a new value...
-            DateTime updatedvalue = CreateRandomDateTime();
+            DateTime updatedvalue = RandomValueGenerators.CreateRandomDateTime();
             // Update our tracking copy for simple comparison...
             trackingconfig.BuildData.datetimeVal = updatedvalue;
 
@@ -1400,38 +1413,38 @@ namespace OGA.AppSettings.Writeable_Tests
             AppSettingsConfigRoot originalsettingsconfig;
             {
                 originalsettingsconfig = new AppSettingsConfigRoot();
-                originalsettingsconfig.Paths.LogPath = CreateRandomString();
-                originalsettingsconfig.Paths.CommonConfigPath = CreateRandomString();
-                originalsettingsconfig.Paths.AppConfigPath = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.Default = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.Microsoft = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.Microsoft_AspNetCore_Http_Connections = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.Microsoft_AspNetCore_SignalR = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.System = CreateRandomString();
-                originalsettingsconfig.Avatar_Store = CreateRandomString();
-                originalsettingsconfig.AllowedHosts = CreateRandomString();
-                originalsettingsconfig.SQLServerConfig.ConnectionString = CreateRandomString();
-                originalsettingsconfig.BuildData.RepoType = CreateRandomString();
-                originalsettingsconfig.BuildData.Source_Revision = CreateRandomString();
-                originalsettingsconfig.BuildData.Source_SolutionSubFolder = CreateRandomString();
-                originalsettingsconfig.BuildData.Source_URL = CreateRandomString();
+                originalsettingsconfig.Paths.LogPath = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Paths.CommonConfigPath = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Paths.AppConfigPath = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.Default = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.Microsoft = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.Microsoft_AspNetCore_Http_Connections = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.Microsoft_AspNetCore_SignalR = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.System = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Avatar_Store = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.AllowedHosts = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.SQLServerConfig.ConnectionString = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.RepoType = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.Source_Revision = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.Source_SolutionSubFolder = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.Source_URL = RandomValueGenerators.CreateRandomString();
 
                 // Baseline values of different types, that will be individually changed in separate tests...
-                originalsettingsconfig.BuildData.stringVal = CreateRandomString();
-                originalsettingsconfig.BuildData.intVal = CreateRandomInt();
-                originalsettingsconfig.BuildData.floatVal = CreateRandomFloat();
-                originalsettingsconfig.BuildData.boolVal = CreateRandomBool();
-                originalsettingsconfig.BuildData.guidVal = CreateRandomGuid();
-                originalsettingsconfig.BuildData.datetimeVal = CreateRandomDateTime();
-                originalsettingsconfig.BuildData.bytesVal = CreateRandomByteArray(100);
-                originalsettingsconfig.BuildData.timespanVal = CreateRandomTimespan();
-                originalsettingsconfig.BuildData.uriVal = CreateRandomUrl();
+                originalsettingsconfig.BuildData.stringVal = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.intVal =  RandomValueGenerators.CreateRandomInt();
+                originalsettingsconfig.BuildData.floatVal =  RandomValueGenerators.CreateRandomFloat();
+                originalsettingsconfig.BuildData.boolVal = RandomValueGenerators.CreateRandomBool();
+                originalsettingsconfig.BuildData.guidVal = RandomValueGenerators.CreateRandomGuid();
+                originalsettingsconfig.BuildData.datetimeVal = RandomValueGenerators.CreateRandomDateTime();
+                originalsettingsconfig.BuildData.bytesVal = RandomValueGenerators.CreateRandomByteArray(100);
+                originalsettingsconfig.BuildData.timespanVal = RandomValueGenerators.CreateRandomTimespan();
+                originalsettingsconfig.BuildData.uriVal = RandomValueGenerators.CreateRandomUrl();
             }
 
 
             // We are testing that a byte array config value can be updated across the app and in stored appsettings.json.
             // Assign the original value under test...
-            originalsettingsconfig.BuildData.bytesVal = CreateRandomByteArray(100);
+            originalsettingsconfig.BuildData.bytesVal = RandomValueGenerators.CreateRandomByteArray(100);
 
 
             // Make a copy of the settings data, that we can update to track changes we make and verify they are mirrored by the settings classes under test....
@@ -1515,7 +1528,7 @@ namespace OGA.AppSettings.Writeable_Tests
                 };
 
                 // Standup the root-scoped service provider...
-                svcprov = Setup_DIProvider(didelegate);
+                svcprov = ServiceProviderHelper.Setup_DIProvider(didelegate);
             }
 
 
@@ -1525,7 +1538,7 @@ namespace OGA.AppSettings.Writeable_Tests
 
 
             // Determine a new value...
-            byte[] updatedvalue = CreateRandomByteArray(100);
+            byte[] updatedvalue = RandomValueGenerators.CreateRandomByteArray(100);
             // Update our tracking copy for simple comparison...
             trackingconfig.BuildData.bytesVal = updatedvalue;
 
@@ -1582,38 +1595,38 @@ namespace OGA.AppSettings.Writeable_Tests
             AppSettingsConfigRoot originalsettingsconfig;
             {
                 originalsettingsconfig = new AppSettingsConfigRoot();
-                originalsettingsconfig.Paths.LogPath = CreateRandomString();
-                originalsettingsconfig.Paths.CommonConfigPath = CreateRandomString();
-                originalsettingsconfig.Paths.AppConfigPath = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.Default = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.Microsoft = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.Microsoft_AspNetCore_Http_Connections = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.Microsoft_AspNetCore_SignalR = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.System = CreateRandomString();
-                originalsettingsconfig.Avatar_Store = CreateRandomString();
-                originalsettingsconfig.AllowedHosts = CreateRandomString();
-                originalsettingsconfig.SQLServerConfig.ConnectionString = CreateRandomString();
-                originalsettingsconfig.BuildData.RepoType = CreateRandomString();
-                originalsettingsconfig.BuildData.Source_Revision = CreateRandomString();
-                originalsettingsconfig.BuildData.Source_SolutionSubFolder = CreateRandomString();
-                originalsettingsconfig.BuildData.Source_URL = CreateRandomString();
+                originalsettingsconfig.Paths.LogPath = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Paths.CommonConfigPath = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Paths.AppConfigPath = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.Default = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.Microsoft = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.Microsoft_AspNetCore_Http_Connections = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.Microsoft_AspNetCore_SignalR = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.System = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Avatar_Store = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.AllowedHosts = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.SQLServerConfig.ConnectionString = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.RepoType = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.Source_Revision = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.Source_SolutionSubFolder = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.Source_URL = RandomValueGenerators.CreateRandomString();
 
                 // Baseline values of different types, that will be individually changed in separate tests...
-                originalsettingsconfig.BuildData.stringVal = CreateRandomString();
-                originalsettingsconfig.BuildData.intVal = CreateRandomInt();
-                originalsettingsconfig.BuildData.floatVal = CreateRandomFloat();
-                originalsettingsconfig.BuildData.boolVal = CreateRandomBool();
-                originalsettingsconfig.BuildData.guidVal = CreateRandomGuid();
-                originalsettingsconfig.BuildData.datetimeVal = CreateRandomDateTime();
-                originalsettingsconfig.BuildData.bytesVal = CreateRandomByteArray(100);
-                originalsettingsconfig.BuildData.timespanVal = CreateRandomTimespan();
-                originalsettingsconfig.BuildData.uriVal = CreateRandomUrl();
+                originalsettingsconfig.BuildData.stringVal = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.intVal =  RandomValueGenerators.CreateRandomInt();
+                originalsettingsconfig.BuildData.floatVal =  RandomValueGenerators.CreateRandomFloat();
+                originalsettingsconfig.BuildData.boolVal = RandomValueGenerators.CreateRandomBool();
+                originalsettingsconfig.BuildData.guidVal = RandomValueGenerators.CreateRandomGuid();
+                originalsettingsconfig.BuildData.datetimeVal = RandomValueGenerators.CreateRandomDateTime();
+                originalsettingsconfig.BuildData.bytesVal = RandomValueGenerators.CreateRandomByteArray(100);
+                originalsettingsconfig.BuildData.timespanVal = RandomValueGenerators.CreateRandomTimespan();
+                originalsettingsconfig.BuildData.uriVal = RandomValueGenerators.CreateRandomUrl();
             }
 
 
             // We are testing that a TimeSpan config value can be updated across the app and in stored appsettings.json.
             // Assign the original value under test...
-            originalsettingsconfig.BuildData.timespanVal = CreateRandomTimespan();
+            originalsettingsconfig.BuildData.timespanVal = RandomValueGenerators.CreateRandomTimespan();
 
 
             // Make a copy of the settings data, that we can update to track changes we make and verify they are mirrored by the settings classes under test....
@@ -1697,7 +1710,7 @@ namespace OGA.AppSettings.Writeable_Tests
                 };
 
                 // Standup the root-scoped service provider...
-                svcprov = Setup_DIProvider(didelegate);
+                svcprov = ServiceProviderHelper.Setup_DIProvider(didelegate);
             }
 
 
@@ -1707,7 +1720,7 @@ namespace OGA.AppSettings.Writeable_Tests
 
 
             // Determine a new value...
-            TimeSpan updatedvalue = CreateRandomTimespan();
+            TimeSpan updatedvalue = RandomValueGenerators.CreateRandomTimespan();
             // Update our tracking copy for simple comparison...
             trackingconfig.BuildData.timespanVal = updatedvalue;
 
@@ -1764,38 +1777,38 @@ namespace OGA.AppSettings.Writeable_Tests
             AppSettingsConfigRoot originalsettingsconfig;
             {
                 originalsettingsconfig = new AppSettingsConfigRoot();
-                originalsettingsconfig.Paths.LogPath = CreateRandomString();
-                originalsettingsconfig.Paths.CommonConfigPath = CreateRandomString();
-                originalsettingsconfig.Paths.AppConfigPath = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.Default = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.Microsoft = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.Microsoft_AspNetCore_Http_Connections = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.Microsoft_AspNetCore_SignalR = CreateRandomString();
-                originalsettingsconfig.Logging.LogLevel.System = CreateRandomString();
-                originalsettingsconfig.Avatar_Store = CreateRandomString();
-                originalsettingsconfig.AllowedHosts = CreateRandomString();
-                originalsettingsconfig.SQLServerConfig.ConnectionString = CreateRandomString();
-                originalsettingsconfig.BuildData.RepoType = CreateRandomString();
-                originalsettingsconfig.BuildData.Source_Revision = CreateRandomString();
-                originalsettingsconfig.BuildData.Source_SolutionSubFolder = CreateRandomString();
-                originalsettingsconfig.BuildData.Source_URL = CreateRandomString();
+                originalsettingsconfig.Paths.LogPath = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Paths.CommonConfigPath = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Paths.AppConfigPath = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.Default = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.Microsoft = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.Microsoft_AspNetCore_Http_Connections = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.Microsoft_AspNetCore_SignalR = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Logging.LogLevel.System = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.Avatar_Store = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.AllowedHosts = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.SQLServerConfig.ConnectionString = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.RepoType = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.Source_Revision = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.Source_SolutionSubFolder = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.Source_URL = RandomValueGenerators.CreateRandomString();
 
                 // Baseline values of different types, that will be individually changed in separate tests...
-                originalsettingsconfig.BuildData.stringVal = CreateRandomString();
-                originalsettingsconfig.BuildData.intVal = CreateRandomInt();
-                originalsettingsconfig.BuildData.floatVal = CreateRandomFloat();
-                originalsettingsconfig.BuildData.boolVal = CreateRandomBool();
-                originalsettingsconfig.BuildData.guidVal = CreateRandomGuid();
-                originalsettingsconfig.BuildData.datetimeVal = CreateRandomDateTime();
-                originalsettingsconfig.BuildData.bytesVal = CreateRandomByteArray(100);
-                originalsettingsconfig.BuildData.timespanVal = CreateRandomTimespan();
-                originalsettingsconfig.BuildData.uriVal = CreateRandomUrl();
+                originalsettingsconfig.BuildData.stringVal = RandomValueGenerators.CreateRandomString();
+                originalsettingsconfig.BuildData.intVal =  RandomValueGenerators.CreateRandomInt();
+                originalsettingsconfig.BuildData.floatVal =  RandomValueGenerators.CreateRandomFloat();
+                originalsettingsconfig.BuildData.boolVal = RandomValueGenerators.CreateRandomBool();
+                originalsettingsconfig.BuildData.guidVal = RandomValueGenerators.CreateRandomGuid();
+                originalsettingsconfig.BuildData.datetimeVal = RandomValueGenerators.CreateRandomDateTime();
+                originalsettingsconfig.BuildData.bytesVal = RandomValueGenerators.CreateRandomByteArray(100);
+                originalsettingsconfig.BuildData.timespanVal = RandomValueGenerators.CreateRandomTimespan();
+                originalsettingsconfig.BuildData.uriVal = RandomValueGenerators.CreateRandomUrl();
             }
 
 
             // We are testing that a Uri config value can be updated across the app and in stored appsettings.json.
             // Assign the original value under test...
-            originalsettingsconfig.BuildData.uriVal = CreateRandomUrl();
+            originalsettingsconfig.BuildData.uriVal = RandomValueGenerators.CreateRandomUrl();
 
 
             // Make a copy of the settings data, that we can update to track changes we make and verify they are mirrored by the settings classes under test....
@@ -1879,7 +1892,7 @@ namespace OGA.AppSettings.Writeable_Tests
                 };
 
                 // Standup the root-scoped service provider...
-                svcprov = Setup_DIProvider(didelegate);
+                svcprov = ServiceProviderHelper.Setup_DIProvider(didelegate);
             }
 
 
@@ -1889,7 +1902,7 @@ namespace OGA.AppSettings.Writeable_Tests
 
 
             // Determine a new value...
-            Uri updatedvalue = CreateRandomUrl();
+            Uri updatedvalue = RandomValueGenerators.CreateRandomUrl();
             // Update our tracking copy for simple comparison...
             trackingconfig.BuildData.uriVal = updatedvalue;
 
